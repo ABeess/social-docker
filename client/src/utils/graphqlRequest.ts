@@ -41,7 +41,7 @@ const app = new GraphQLClient(url, {
       authorization: `Bearer ${getToken()}`,
     };
   },
-  credentials: 'same-origin',
+  credentials: 'include',
 });
 
 export default app;
