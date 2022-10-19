@@ -17,5 +17,5 @@ server
 
 
 
-./variables.env
+variables.env
 node_modules
