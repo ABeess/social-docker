@@ -1,6 +1,6 @@
 import { io } from 'socket.io-client';
 
-const socket = io('http://localhost:3089', {
+const socket = io(import.meta.env.VITE_APP_BASE_URL, {
   transports: ['websocket'],
   withCredentials: true,
 });
