@@ -41,7 +41,7 @@ const main = async (): Promise<void> => {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'strict',
-        domain: 'abeesdev.come',
+        domain: 'abeesdev.com',
       },
       store: new RedisStore({ client: redis }),
       secret: String(process.env.SESSION_SECRET),
