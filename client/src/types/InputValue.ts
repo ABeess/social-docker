@@ -1,5 +1,5 @@
 import { Maybe } from '.';
-import { Comment, Post, User, UserProfile } from './Base';
+import { Post, User, UserProfile } from './Base';
 
 export interface LoginValues {
   email: string;

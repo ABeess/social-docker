@@ -11,7 +11,6 @@ server/dist
 server/node_modules
 server/.vs-code
 server/.env
-server
 
 
 

@@ -2,7 +2,6 @@ import {
   Avatar,
   AvatarGroup,
   Badge,
-  Box,
   capitalize,
   IconButton,
   List,
