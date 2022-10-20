@@ -3,15 +3,19 @@ import { verify } from 'jsonwebtoken';
 import User from '../entities/User';
 import { UnauthorizedRest } from '../lib/errorHandle';
 import { UseJWTPayload } from '../types/index';
+import { setCookie } from '../utils/cookies';
 import { generateToken } from '../utils/jwtManger';
+import { redis } from '../utils/redis';
 const Router = express.Router();
 
 Router.post('/refreshToken', async (req: Request, res: Response) => {
   try {
-    const refreshToken = req.session.refreshToken;
+    const cookies = req.signedCookies['refresh-token'];
 
-    if (!refreshToken) {
-      throw new UnauthorizedRest('You are not authenticated');
+    const refreshToken = await redis.get(`token:${cookies}`);
+
+    if (!refreshToken || !cookies) {
+      throw new UnauthorizedRest('You are not authenticated "cookie"');
     }
 
     const payload = verify(refreshToken, process.env.REFRESH_TOKEN_SECRET) as UseJWTPayload;
@@ -27,7 +31,7 @@ Router.post('/refreshToken', async (req: Request, res: Response) => {
     });
 
     if (!existingUser) {
-      throw new UnauthorizedRest('You are not authenticated');
+      throw new UnauthorizedRest('You are not authenticated "user"');
     }
 
     const newAccessToken = generateToken({
@@ -44,11 +48,17 @@ Router.post('/refreshToken', async (req: Request, res: Response) => {
       form: 'refreshToken',
     });
 
-    req.session.refreshToken = newRefreshToken;
+    await redis.set(existingUser.id, newRefreshToken);
+
+    setCookie({
+      res,
+      data: existingUser.id,
+      name: 'refresh-token',
+    });
 
     return res.status(200).json({
       code: 200,
-      message: 'Refresh  accessToken',
+      message: 'Refresh accessToken',
       accessToken: newAccessToken,
     });
   } catch (error) {

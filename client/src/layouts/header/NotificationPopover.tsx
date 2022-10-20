@@ -36,7 +36,7 @@ import socket from 'src/utils/socket';
 const NotificationPopover = () => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
-  const user = useAppSelector((state) => state.auth.user);
+  const { user, isAuthenticated } = useAppSelector((state) => state.auth);
 
   const { push } = useRouter();
 
@@ -55,6 +55,7 @@ const NotificationPopover = () => {
     async ({ pageParam = 0 }) =>
       await getNotification({ query: { page: pageParam, limit: 5 }, ownerId: user?.id as string }),
     {
+      enabled: isAuthenticated,
       getNextPageParam: ({ page, totalPage }) => (Number(page) < Number(totalPage) - 1 ? Number(page) + 1 : undefined),
       onSuccess(data) {
         const lastData = data.pages.slice(-1).pop();

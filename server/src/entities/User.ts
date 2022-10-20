@@ -39,7 +39,7 @@ export default class User extends Model {
   @Field({ nullable: true })
   @Column({
     nullable: true,
-    default: 'https://storage.googleapis.com/upload-file-c/06d76789329f40378962037b371373ca.jpg',
+    default: 'https://storage.googleapis.com/upload-file-c/e53ae0f07bbe4f00a4701b0be52668fe.png',
   })
   avatar: string;
 

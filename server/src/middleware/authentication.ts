@@ -1,6 +1,7 @@
 import { AuthenticationError } from 'apollo-server-core';
 import { Secret, verify } from 'jsonwebtoken';
 import { MiddlewareFn } from 'type-graphql';
+import { UnauthorizedError } from '../lib/errorHandle';
 import { Context, UseJWTPayload } from '../types/index';
 
 export const authentication: MiddlewareFn<Context> = ({ context }, next) => {
@@ -13,7 +14,7 @@ export const authentication: MiddlewareFn<Context> = ({ context }, next) => {
     }
     verify(accessToken, process.env.ACCESS_TOKEN_SECRET as Secret, (error, payload) => {
       if (error) {
-        throw new AuthenticationError(error.message || 'Interval server');
+        throw new UnauthorizedError(error.message || 'Interval server');
       }
       context.user = payload as UseJWTPayload;
     });

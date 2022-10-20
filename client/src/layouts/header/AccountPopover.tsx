@@ -1,6 +1,8 @@
 import { Box, Divider, Link as MUILink, List, ListItemButton, ListItemText, Typography } from '@mui/material';
+import { useMutation } from '@tanstack/react-query';
 import { MouseEvent, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { logoutRequest } from 'src/api/auth.api';
 import MyAvatar from 'src/components/MyAvatar';
 import Popover from 'src/components/Popover';
 import { useAppDispatch, useAppSelector } from 'src/redux/hooks';
@@ -18,8 +20,14 @@ export default function AccountPopover() {
 
   const dispatch = useAppDispatch();
 
+  const { mutate } = useMutation(() => logoutRequest(), {
+    onSuccess() {
+      dispatch(userLogout());
+    },
+  });
+
   const handleLogout = () => {
-    dispatch(userLogout());
+    mutate();
   };
 
   const handleClosePopover = () => {

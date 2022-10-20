@@ -17,12 +17,15 @@ import { AppDataSource } from './lib/dataSource';
 import rootRouter from './routes/rootRouter';
 import { Context } from './types';
 import { redis } from './utils/redis';
+import cookieParser from 'cookie-parser';
 
 const main = async (): Promise<void> => {
   // const upload = multer({ storage: multer.diskStorage({}) });
   const app = express();
 
   const httpServer = createServer(app);
+
+  console.log(process.env.DB_NAME);
 
   const RedisStore = connectRedis(session);
 
@@ -33,15 +36,19 @@ const main = async (): Promise<void> => {
     })
   );
 
+  app.use(cookieParser(process.env.SESSION_SECRET));
+
   app.use(
     session({
       name: process.env.SESSION_NAME,
       cookie: {
         maxAge: 1000 * 60 * 60 * 24 * 7,
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
+        // secure: process.env.NODE_ENV === 'production',
         sameSite: 'strict',
-        domain: 'abeesdev.com',
+        ...(process.env.NODE_ENV === 'production' && {
+          domain: 'abeesdev.com',
+        }),
       },
       store: new RedisStore({ client: redis }),
       secret: String(process.env.SESSION_SECRET),
@@ -57,18 +64,6 @@ const main = async (): Promise<void> => {
   });
 
   channel(httpServer);
-
-  // const wsServer = new WebSocketServer({
-  //   server: httpServer,
-  //   path: '/graphql',
-  // });
-
-  // const serverCleanup = useServer(
-  //   {
-  //     schema,
-  //   },
-  //   wsServer
-  // );
 
   const apolloServer = new ApolloServer({
     schema,
@@ -94,7 +89,6 @@ const main = async (): Promise<void> => {
   await new Promise((resolve) => httpServer.listen(PORT, resolve as () => void));
 
   await AppDataSource.connect();
-  console.log('<-- Connect DB -->');
   console.log(`Graphql endpoint on: http://localhost:${PORT}${apolloServer.graphqlPath}`);
 };
 

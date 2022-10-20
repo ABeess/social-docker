@@ -1,5 +1,6 @@
 // import argon2 from 'argon2';
 import { verify } from 'jsonwebtoken';
+import { setCookie } from '../utils/cookies';
 import { Arg, Ctx, Mutation, Query, Resolver } from 'type-graphql';
 import { User } from '../entities/index';
 import { LoginInput } from '../inputs/LoginInput';
@@ -9,6 +10,7 @@ import { UserLogoutResponse, UserResponse } from '../response/UserResponse';
 import { Context, UseJWTPayload } from '../types/index';
 import { generateToken } from '../utils/jwtManger';
 import { generateError } from '../utils/responseError';
+import { redis } from '../utils/redis';
 
 @Resolver()
 export default class UserResolver {
@@ -47,7 +49,7 @@ export default class UserResolver {
   @Mutation(() => UserResponse)
   async login(
     @Arg('loginInput') { email, password }: LoginInput,
-    @Ctx() { req }: Context
+    @Ctx() { res }: Context
   ): Promise<UserResponse> {
     try {
       const existingUser = await User.findOne({ where: { email } });
@@ -61,8 +63,16 @@ export default class UserResolver {
       const accessToken = generateToken({ data: { sub: existingUser.id }, form: 'accessToken' });
       const refreshToken = generateToken({ data: { sub: existingUser.id }, form: 'refreshToken' });
 
-      req.session.userId = existingUser.id;
-      req.session.refreshToken = refreshToken;
+      // req.session.userId = existingUser.id;
+      // req.session.refreshToken = refreshToken;
+
+      setCookie({
+        res,
+        data: existingUser.id,
+        name: 'refresh-token',
+      });
+
+      await redis.set(`token:${existingUser.id}`, refreshToken, 'EX', 3600 * 24 * 365);
 
       return {
         code: 200,
@@ -124,14 +134,15 @@ export default class UserResolver {
     }
   }
   @Mutation(() => UserLogoutResponse)
-  async logout(@Ctx() { res, req }: Context): Promise<UserLogoutResponse> {
+  async logout(@Ctx() { res }: Context): Promise<UserLogoutResponse> {
     try {
-      res.clearCookie(process.env.SESSION_NAME);
-      req.session.destroy((err) => {
-        if (err) {
-          throw new UnauthorizedError(err.message);
-        }
-      });
+      // res.clearCookie(process.env.SESSION_NAME);
+      // req.session.destroy((err) => {
+      //   if (err) {
+      //     throw new UnauthorizedError(err.message);
+      //   }
+      // });
+      res.clearCookie('refresh-token');
       return {
         code: 200,
         message: 'User logout',

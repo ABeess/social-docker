@@ -40,6 +40,8 @@ export interface UserResponse extends BaseResponse, Typename {
   user?: Maybe<User>;
 }
 
+export interface LogoutResponse extends BaseResponse, Typename {}
+
 export interface NotificationQueryResponse extends QueryResponse, Typename {
   notifications?: Maybe<Array<Notification>>;
   totalUnread: number;

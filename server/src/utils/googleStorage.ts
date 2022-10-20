@@ -6,8 +6,6 @@ import { generateFileName } from './generateFileName';
 
 import _keyFile from '../weighty-droplet-357309-d67e3ea0b5f4.json';
 
-console.log(path.join(__dirname, '../weighty-droplet-357309-d67e3ea0b5f4.json' as string));
-
 const storage = new Storage({
   keyFilename: path.join(__dirname, '../weighty-droplet-357309-d67e3ea0b5f4.json' as string),
   projectId: process.env.PROJECT_ID_STORAGE,

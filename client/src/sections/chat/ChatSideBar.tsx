@@ -61,74 +61,72 @@ export default function ChatSideBar() {
 
       <ChatSearch />
 
-      <ScrollBar sx={{ position: 'absolute', inset: 0, top: 0 }}>
-        <Box sx={{ px: 1 }}>
-          <List>
-            {data?.conversations?.map((item, index) => {
-              const { participants, id, title, type, lastMessage, lastSendUser, updatedAt } = item;
+      <ScrollBar sx={{ flex: 1, py: 1, px: 1 }}>
+        <List>
+          {data?.conversations?.map((item, index) => {
+            const { participants, id, title, type, lastMessage, lastSendUser, updatedAt } = item;
 
-              const newUser = participants.find((item) => item.user.id !== user.id);
+            const newUser = participants.find((item) => item.user.id !== user.id);
 
-              console.log(lastSendUser);
-              const active = id === params.to;
-              const receiver: Array<User> = participants.map((item) => item.user);
-              const name = title
-                ? title
-                : type === 'groups'
-                ? participants.reduce((prev, acc) => `${prev} ${acc.user.firstName} ${acc.user.lastName},`, '')
-                : `${newUser?.user.firstName} ${newUser?.user.lastName}`;
+            console.log(lastSendUser);
+            const active = id === params.to;
+            const receiver: Array<User> = participants.map((item) => item.user);
+            const name = title
+              ? title
+              : type === 'groups'
+              ? participants.reduce((prev, acc) => `${prev} ${acc.user.firstName} ${acc.user.lastName},`, '')
+              : `${newUser?.user.firstName} ${newUser?.user.lastName}`;
 
-              const avatar = participants.reduce((_, acc) => acc.user.avatar as string, '');
-              return (
-                <ListItemButton
-                  key={index}
-                  sx={{ borderRadius: 1, ...(active && { bgcolor: (theme) => theme.palette.action.hover }) }}
-                  onClick={() => handleSelectChat(id, receiver)}
-                >
-                  <ListItemAvatar>
-                    <Badge
-                      overlap="circular"
-                      anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-                      badgeContent={
-                        type === 'groups' ? (
-                          <AvatarGroup>
-                            <Avatar src={avatar || ''} sx={{ width: 24, height: 24 }} />
-                          </AvatarGroup>
-                        ) : (
-                          <></>
-                        )
-                      }
-                    >
-                      <Avatar src={participants[0].user.avatar || ''} />
-                    </Badge>
-                  </ListItemAvatar>
-                  <ListItemText
-                    primary={
-                      <TextMaxLine line={1} variant="subtitle2" sx={{ textTransform: 'capitalize' }}>
-                        {name}
-                      </TextMaxLine>
+            const avatar = participants.reduce((_, acc) => acc.user.avatar as string, '');
+            return (
+              <ListItemButton
+                key={index}
+                sx={{ borderRadius: 1, ...(active && { bgcolor: (theme) => theme.palette.action.hover }) }}
+                onClick={() => handleSelectChat(id, receiver)}
+              >
+                <ListItemAvatar>
+                  <Badge
+                    overlap="circular"
+                    anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                    badgeContent={
+                      type === 'groups' ? (
+                        <AvatarGroup>
+                          <Avatar src={avatar || ''} sx={{ width: 24, height: 24 }} />
+                        </AvatarGroup>
+                      ) : (
+                        <></>
+                      )
                     }
-                    secondary={
-                      <TextMaxLine line={1} variant="caption">
-                        {lastMessage && lastSendUser?.id === user.id
-                          ? 'you: ' + lastMessage
-                          : capitalize(`${lastSendUser?.firstName} ${lastSendUser?.lastName}: `) + lastMessage || ''}
-                      </TextMaxLine>
-                    }
-                  />
-                  <ListItemText
-                    sx={{ flex: '0 0 auto', ml: 2 }}
-                    secondary={
-                      <Typography variant="caption" color="text.secondary">
-                        {fDistanceStrict(updatedAt)}
-                      </Typography>
-                    }
-                  />
-                </ListItemButton>
-              );
-            })}
-          </List>
-        </Box>
+                  >
+                    <Avatar src={participants[0].user.avatar || ''} />
+                  </Badge>
+                </ListItemAvatar>
+                <ListItemText
+                  primary={
+                    <TextMaxLine line={1} variant="subtitle2" sx={{ textTransform: 'capitalize' }}>
+                      {name}
+                    </TextMaxLine>
+                  }
+                  secondary={
+                    <TextMaxLine line={1} variant="caption">
+                      {lastMessage && lastSendUser?.id === user.id
+                        ? 'you: ' + lastMessage
+                        : capitalize(`${lastSendUser?.firstName} ${lastSendUser?.lastName}: `) + lastMessage || ''}
+                    </TextMaxLine>
+                  }
+                />
+                <ListItemText
+                  sx={{ flex: '0 0 auto', ml: 2 }}
+                  secondary={
+                    <Typography variant="caption" color="text.secondary">
+                      {fDistanceStrict(updatedAt)}
+                    </Typography>
+                  }
+                />
+              </ListItemButton>
+            );
+          })}
+        </List>
       </ScrollBar>
     </RootStyled>
   );

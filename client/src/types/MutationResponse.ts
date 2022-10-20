@@ -11,6 +11,7 @@ import {
 export type Mutation = {
   login: UserResponse;
   register: UserResponse;
+  logout: LogoutMutation;
   markAsRead: BaseResponse;
   createComment: BaseResponse;
   replyComment: BaseResponse;
@@ -24,6 +25,7 @@ export type Mutation = {
 
 export type LoginMutation = Pick<Mutation, 'login'>;
 export type RegisterMutation = Pick<Mutation, 'register'>;
+export type LogoutMutation = Pick<Mutation, 'logout'>;
 export type MaskAsReadMutation = Pick<Mutation, 'markAsRead'>;
 export type CreateCommentMutation = Pick<Mutation, 'createComment'>;
 export type ReplyCommentMutation = Pick<Mutation, 'replyComment'>;

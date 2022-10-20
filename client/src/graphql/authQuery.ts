@@ -34,3 +34,13 @@ export const REGISTER_QUERY = gql`
     }
   }
 `;
+
+export const LOGOUT_QUERY = gql`
+  mutation Logout {
+    logout {
+      code
+      message
+      __typename
+    }
+  }
+`;
