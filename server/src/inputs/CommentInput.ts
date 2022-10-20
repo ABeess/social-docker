@@ -1,6 +1,6 @@
 import { GraphQLJSONObject } from 'graphql-type-json';
 import { Field, InputType } from 'type-graphql';
-import { Post, User } from '../entities';
+import { User } from '../entities';
 import Comment from '../entities/Comment';
 
 @InputType()
