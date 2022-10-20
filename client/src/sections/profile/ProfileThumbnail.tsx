@@ -1,8 +1,9 @@
 import { LoadingButton } from '@mui/lab';
 import { alpha, Avatar, AvatarGroup, Box, Button, Card, IconButton, Stack, styled, Typography } from '@mui/material';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useCallback, useEffect, useState } from 'react';
 import { uploadSingle } from 'src/api/upload.api';
+import { IUploadAvatar, uploadAvatar } from 'src/api/user.api';
 import Dialog from 'src/components/Dialog';
 import Iconify from 'src/components/Iconify';
 import Image from 'src/components/Image';
@@ -11,7 +12,7 @@ import useRouter from 'src/hooks/useRouter';
 import { useAppDispatch, useAppSelector } from 'src/redux/hooks';
 import { updateAvatarRedux } from 'src/redux/slice/auth.slice';
 import { closeModal, openModal } from 'src/redux/slice/modal.slice';
-import { FileType } from 'src/types/Base';
+import { FileType, User } from 'src/types/Base';
 import { ProfileUserResponse } from 'src/types/Response';
 import { hashOwner } from 'src/utils/whitelistUrl';
 import { ProfileCreateForm } from './ProfileCreateForm';
@@ -79,16 +80,15 @@ const ItemAvatarStyled = styled('div')<ItemAvatarProp>(({ theme, open }) => ({
 }));
 
 export default function ProfileThumbnail() {
-  const user = useAppSelector((state) => state.auth.user);
+  const user = useAppSelector((state) => state.auth.user) as User;
   const [file, setFile] = useState<Partial<FileType>>({});
   const [owner, setOwner] = useState(false);
-  // const [currentUser, setCurrenUser] = useState<Partial<User>>({});
-
   const { params } = useRouter();
   const modal = useAppSelector((state) => state.modal);
   const enableQuery = useAppSelector((state) => state.enableQuery);
   const dispatch = useAppDispatch();
   const [isHoverAvatar, setIsHoverAvatar] = useState(false);
+  const queryClient = useQueryClient();
 
   const handleOpenModal = (name: string) => {
     dispatch(openModal(name));
@@ -133,7 +133,36 @@ export default function ProfileThumbnail() {
     setOwner(hashOwner(String(params.id), String(user?.id)));
   }, [params]);
 
-  // const [uploadAvatarMutation, { loading }] = useUploadAvatarMutation();
+  const { mutateAsync } = useMutation((values: IUploadAvatar) => uploadAvatar(values));
+
+  const { mutateAsync: uploadAvatarFile, isLoading: isLoadingUpload } = useMutation(
+    (values: FormData) => uploadSingle(values),
+    {
+      async onSuccess({ upload }) {
+        const res = await mutateAsync({
+          userId: user?.id,
+          url: upload.url,
+        });
+        if (res.code === 200) {
+          const prevProfile = queryClient.getQueryData<ProfileUserResponse>([
+            'PROFILE_USER',
+            { user_id: params.id },
+          ]) as ProfileUserResponse;
+
+          console.log(upload);
+          queryClient.setQueryData<ProfileUserResponse>(['PROFILE_USER', { user_id: params.id }], {
+            ...prevProfile,
+            user: {
+              ...prevProfile?.user,
+              avatar: upload.url,
+            },
+          });
+
+          dispatch(updateAvatarRedux(upload.url));
+        }
+      },
+    }
+  );
 
   const handleUploadAvatar = async () => {
     try {
@@ -141,16 +170,8 @@ export default function ProfileThumbnail() {
       if (!file) return;
 
       formData.append('file', file as FileType);
-      const res = await uploadSingle(formData);
+      await uploadAvatarFile(formData);
 
-      // await uploadAvatarMutation({
-
-      //   variables: {
-      //     url: res.upload.url,
-      //     userId: user?.id as string,
-      //   },
-      // });
-      dispatch(updateAvatarRedux(res.upload.url));
       handleCloseModal('avatar');
       setFile({});
     } catch (error) {
@@ -218,7 +239,7 @@ export default function ProfileThumbnail() {
             <Box sx={{ p: 2 }}>
               <UploadSingle file={file} onDrop={ondrop} sx={{ height: 400 }} />
               <Stack mt={2}>
-                <LoadingButton loading={true} variant="contained" onClick={handleUploadAvatar}>
+                <LoadingButton loading={isLoadingUpload} variant="contained" onClick={handleUploadAvatar}>
                   Upload
                 </LoadingButton>
               </Stack>

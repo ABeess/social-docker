@@ -1,5 +1,5 @@
 import { Skeleton, Stack, StackProps } from '@mui/material';
-import React, { forwardRef } from 'react';
+import { forwardRef } from 'react';
 
 // eslint-disable-next-line react/display-name
 const NotificationSkeleton = forwardRef(({ ...other }: StackProps, ref) => (

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable no-unused-vars */
-import { createContext, ReactElement, useEffect, useState } from 'react';
+import { createContext, ReactElement } from 'react';
 import useCookiesTheme from 'src/hooks/useCookies';
 
 interface IInitialState {
@@ -24,20 +24,16 @@ interface SettingProviderProp {
 export default function SettingContextProvider({ children }: SettingProviderProp): ReactElement {
   const { themeMode, setThemeMode } = useCookiesTheme();
 
-  const [theme, setTheme] = useState('light');
-
-  useEffect(() => setTheme(themeMode || 'light'), [themeMode]);
-
   const handleChangeTheme = (mode: string) => {
     setThemeMode(mode);
   };
 
   const handleToggleTheme = () => {
-    setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
+    setThemeMode(themeMode === 'light' ? 'dark' : 'light');
   };
 
   return (
-    <SettingContext.Provider value={{ themeMode: theme, onChange: handleChangeTheme, onToggleMode: handleToggleTheme }}>
+    <SettingContext.Provider value={{ themeMode, onChange: handleChangeTheme, onToggleMode: handleToggleTheme }}>
       {children}
     </SettingContext.Provider>
   );

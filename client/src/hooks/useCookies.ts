@@ -7,8 +7,13 @@ export default function useCookiesTheme() {
     setCookie('themeMode', mode, {
       path: '/',
       sameSite: 'lax',
+      ...(import.meta.env.PROD && {
+        domain: 'abeesdev.com',
+      }),
     });
   };
+
+  console.log(import.meta.env.PROD);
 
   return {
     themeMode: cookie.themeMode as string,

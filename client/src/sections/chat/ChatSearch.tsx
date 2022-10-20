@@ -1,5 +1,4 @@
 import { InputAdornment, styled, TextField } from '@mui/material';
-import React from 'react';
 import Iconify from 'src/components/Iconify';
 
 const RootStyled = styled('div')(({ theme }) => ({

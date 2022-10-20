@@ -1,6 +1,6 @@
 import { Box, styled, Tooltip, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import IconButtonAnimate from 'src/components/animate/IconButtonAnimate';
 import Iconify from 'src/components/Iconify';
 

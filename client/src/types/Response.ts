@@ -24,6 +24,8 @@ export type BaseResponse = {
   message: string;
 };
 
+export type MutationResponse = BaseResponse & Typename;
+
 export type Typename = {
   __typename?: string;
 };

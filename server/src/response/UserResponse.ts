@@ -17,6 +17,12 @@ export class UserResponse implements BaseResponse {
 }
 
 @ObjectType({ implements: BaseResponse })
+export class ResponseMutation implements BaseResponse {
+  code: number;
+  message: string;
+}
+
+@ObjectType({ implements: BaseResponse })
 export class UserLogoutResponse implements BaseResponse {
   code: number;
 

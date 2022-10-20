@@ -1,6 +1,6 @@
 import { GlobalStyles, useTheme } from '@mui/material';
-import React, { useEffect, useMemo } from 'react';
 import NProgress from 'nprogress';
+import { useEffect, useMemo } from 'react';
 export function ProgressBarStyle() {
   const theme = useTheme();
 

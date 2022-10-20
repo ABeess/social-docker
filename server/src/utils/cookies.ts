@@ -13,7 +13,7 @@ export const setCookie = <T>({ res, data, name, options }: SetCookieParams<T>) =
     sameSite: 'strict',
     maxAge: 1000 * 60 * 60 * 24 * 365,
     signed: true,
-    ...(process.env.NODE_ENV === 'production' && {
+    ...(process.env.ENV === 'production' && {
       domain: 'abeesdev.com',
     }),
     ...options,

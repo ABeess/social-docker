@@ -8,6 +8,7 @@ import { UserProfileInput } from '../inputs/UserProfileInput';
 import { HoverCardResponse } from '../response/HoverCardResponse';
 import {
   ProfileUserResponse,
+  ResponseMutation,
   UpdateUserProfileResponse,
   UserNotCurrentResponse,
 } from '../response/UserResponse';
@@ -173,9 +174,22 @@ export default class UserResolver {
     }
   }
 
-  @Mutation(() => Boolean)
-  async uploadAvatar(@Arg('userId') id: string, @Arg('url') url: string): Promise<boolean> {
-    await User.update({ id }, { avatar: url });
-    return true;
+  @Mutation(() => ResponseMutation)
+  async uploadAvatar(
+    @Arg('userId') id: string,
+    @Arg('url') url: string
+  ): Promise<ResponseMutation> {
+    try {
+      await User.update({ id }, { avatar: url });
+      return {
+        code: 200,
+        message: 'Update avatar',
+      };
+    } catch (error) {
+      return {
+        code: 500,
+        message: error.message,
+      };
+    }
   }
 }

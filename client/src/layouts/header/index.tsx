@@ -42,9 +42,9 @@ const PROFILE_TABS = [
     path: PATH_PAGE.lookingFriend,
   },
   {
-    value: 'introduce',
+    value: 'message',
     icon: <OndemandVideoIcon sx={{ width: 32, height: 32 }} />,
-    path: PATH_PAGE.post,
+    path: PATH_PAGE.message('new'),
   },
 ];
 

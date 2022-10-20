@@ -60,3 +60,13 @@ export const UPDATE_PROFILE = gql`
     }
   }
 `;
+
+export const UPLOAD_AVATAR = gql`
+  mutation UploadAvatar($url: String!, $userId: String!) {
+    uploadAvatar(url: $url, userId: $userId) {
+      code
+      message
+      __typename
+    }
+  }
+`;

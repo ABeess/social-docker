@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import React, { createContext, ReactElement, useState } from 'react';
+import { createContext, ReactElement, useState } from 'react';
 
 interface IState {
   isCollapse: boolean;

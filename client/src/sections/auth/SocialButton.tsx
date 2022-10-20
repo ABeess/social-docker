@@ -1,5 +1,4 @@
 import { Button, Stack } from '@mui/material';
-import React from 'react';
 import Iconify from 'src/components/Iconify';
 
 export default function SocialButton() {
