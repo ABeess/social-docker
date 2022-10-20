@@ -23,6 +23,8 @@ const main = async (): Promise<void> => {
   // const upload = multer({ storage: multer.diskStorage({}) });
   const app = express();
 
+  console.log(process.env.NODE_ENV);
+
   const httpServer = createServer(app);
 
   console.log(process.env.DB_NAME);
