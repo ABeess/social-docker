@@ -28,15 +28,15 @@ export type MaskAsReadInput = {
 };
 
 export type CreateCommentInput = {
-  author: User;
+  authorId: string;
   message: string;
-  post: Post;
+  postId: string;
 };
 
 export type ReplyCommentInput = {
   author: User;
   message: string;
-  comment: Comment;
+  commentId: string;
   postId: string;
 };
 

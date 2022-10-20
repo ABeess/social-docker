@@ -11,7 +11,7 @@ import { Context, UseJWTPayload } from '../types/index';
 import { generateToken } from '../utils/jwtManger';
 import { generateError } from '../utils/responseError';
 import { redis } from '../utils/redis';
-
+import bycypt from 'bcrypt';
 @Resolver()
 export default class UserResolver {
   @Query(() => String)
@@ -29,7 +29,7 @@ export default class UserResolver {
       if (existingUser) {
         throw new Conflict('Email already exists on the system');
       }
-      const passwordHash = password;
+      const passwordHash = await bycypt.hash(password, 10);
       const newUser = User.create({
         ...registerInput,
         email,
@@ -56,7 +56,7 @@ export default class UserResolver {
 
       if (!existingUser) throw new NotfoundError('Email and password incorrect');
 
-      const passwordValid = password;
+      const passwordValid = await bycypt.compare(password, existingUser.password);
 
       if (!passwordValid) throw new NotfoundError('Email and password incorrect');
 

@@ -32,7 +32,7 @@ export default function CommentList({ post }: CommentListProps) {
   });
 
   const { comments, totalCount } = commentResponse;
-  const user = useAppSelector((state) => state.auth.user);
+  const user = useAppSelector((state) => state.auth.user) as User;
 
   const [message, setMessage] = useState('');
 
@@ -77,7 +77,7 @@ export default function CommentList({ post }: CommentListProps) {
 
   const handleSendComment = async () => {
     try {
-      await sendComment({ author: user as User, post, message });
+      await sendComment({ authorId: user.id, postId: post.id, message });
       setMessage('');
     } catch (error) {
       console.log(error);

@@ -14,20 +14,29 @@ export default class CommentResolver {
   @Mutation(() => CreateCommentResponse)
   @UseMiddleware(authentication)
   async createComment(
-    @Arg('data') { message, author, post }: CommentInput
+    @Arg('data') { message, authorId, postId }: CommentInput
   ): Promise<CreateCommentResponse> {
     try {
       const newComment = Comment.create({
         message: message,
-        author: author,
-        post: post,
+        author: {
+          id: authorId,
+        },
+        post: {
+          id: postId,
+        },
       });
 
       await newComment.save();
-      const { post: newPost, ...other } = newComment;
 
-      _io.to(post?.id as string).emit('POST_COMMENT', {
-        data: other,
+      const comment = await Comment.findOne({
+        where: {
+          id: newComment.id,
+        },
+        relations: ['author'],
+      });
+      _io.to(postId).emit('POST_COMMENT', {
+        data: comment,
         type: 'comment',
       });
 
@@ -43,19 +52,21 @@ export default class CommentResolver {
   @Mutation(() => ReplyResponse)
   @UseMiddleware(authentication)
   async replyComment(
-    @Arg('data') { author, message, comment, postId }: ReplyInput
+    @Arg('data') { author, message, commentId, postId }: ReplyInput
   ): Promise<ReplyResponse> {
     try {
-      const reply = ReplyCommentPost.create({
-        author: author,
+      const newReply = ReplyCommentPost.create({
+        author,
         message: message,
-        parent: comment,
+        parent: {
+          id: commentId,
+        },
       });
 
-      await reply.save();
+      await newReply.save();
 
       _io.to(postId).emit('POST_COMMENT', {
-        data: reply,
+        data: newReply,
         type: 'reply',
       });
       return {

@@ -75,7 +75,7 @@ export type Comment = {
   __typename?: 'Comment';
   author?: Maybe<User>;
   createdAt: Date;
-  id?: Maybe<string>;
+  id: string;
   message: Maybe<string>;
   post: Post;
   reply?: Maybe<Array<Reply>>;

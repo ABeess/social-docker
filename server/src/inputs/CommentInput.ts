@@ -8,29 +8,29 @@ export class CommentInput implements Partial<Comment> {
   @Field()
   message: string;
 
-  @Field(() => GraphQLJSONObject, { nullable: true })
-  post?: Post;
+  @Field({ nullable: true })
+  postId: string;
 
-  @Field(() => GraphQLJSONObject)
-  author?: User;
+  @Field()
+  authorId?: string;
 
   @Field({ nullable: true })
   type?: string;
 
-  @Field(() => GraphQLJSONObject, { nullable: true })
-  comment?: Comment;
+  @Field({ nullable: true })
+  commentId?: string;
 }
 
 @InputType()
-export class ReplyInput implements Partial<Comment> {
+export class ReplyInput {
   @Field()
   message: string;
 
   @Field(() => GraphQLJSONObject)
   author?: User;
 
-  @Field(() => GraphQLJSONObject)
-  comment?: Comment;
+  @Field()
+  commentId?: string;
 
   @Field()
   postId: string;

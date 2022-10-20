@@ -93,7 +93,7 @@ interface CommentItemRootProp {
 export default function CommentItemRoot({ comment, post }: CommentItemRootProp) {
   const [openRely, setOpenReply] = useState(false);
   const [reply, setRely] = useState('');
-  const user = useAppSelector((state) => state.auth.user);
+  const user = useAppSelector((state) => state.auth.user) as User;
 
   const [commentState, setCommentState] = useState<Comment>(comment as Comment);
 
@@ -121,9 +121,9 @@ export default function CommentItemRoot({ comment, post }: CommentItemRootProp) 
       //   },
       // });
       await sendReplyMutation({
-        author: user as User,
+        author: user,
         message: reply,
-        comment,
+        commentId: comment.id,
         postId: post.id,
       });
       setOpenReply(false);
