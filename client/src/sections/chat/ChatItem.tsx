@@ -1,6 +1,5 @@
 import { alpha, Avatar, Stack, styled, Typography } from '@mui/material';
 import { capitalCase } from 'change-case';
-import { useAppSelector } from 'src/redux/hooks';
 import { Message } from 'src/types/Base';
 import { fDistanceStrict } from 'src/utils/formatTime';
 
@@ -40,12 +39,11 @@ interface ChatItemProp {
 }
 
 export default function ChatItem({ reply, data }: ChatItemProp) {
-  const user = useAppSelector((state) => state.auth.user);
-
   const { message, sender, createdAt } = data;
+
   return (
     <RootStyled reply={reply}>
-      {reply && <Avatar src={user?.avatar || ''} sx={{ width: 35, height: 35, alignSelf: 'flex-end' }} />}
+      {reply && <Avatar src={sender.avatar || ''} sx={{ width: 35, height: 35, alignSelf: 'flex-end' }} />}
       <Stack spacing={0.5}>
         <Typography variant="caption" align={reply ? 'left' : 'right'} mr={1}>
           {reply ? capitalCase(`${sender.firstName} ${sender.lastName}`) : 'You'}, {fDistanceStrict(createdAt)}

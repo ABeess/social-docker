@@ -1,5 +1,6 @@
 import { Arg, Mutation, Query, Resolver, UseMiddleware } from 'type-graphql';
 import { Image, Post } from '../entities';
+import PostChanel from '../entities/PostRoom';
 import { PostInput } from '../inputs/CreateBookInput';
 import { ImageInput } from '../inputs/ImageInput';
 import { QueryInput } from '../inputs/QueryInput';
@@ -7,6 +8,7 @@ import { authentication } from '../middleware/authentication';
 import { AllPostResponse, PostResponse } from '../response/PostResponse';
 import { formatDate } from '../utils/formatDate';
 import { queryGenerate } from '../utils/queryGenerate';
+import { uuid } from '../utils/uuid';
 
 @Resolver()
 export default class PostResolver {
@@ -50,7 +52,6 @@ export default class PostResolver {
     @Arg('images', () => [ImageInput]) imageInput: ImageInput[]
   ): Promise<PostResponse> {
     try {
-      console.log('Create Post');
       const { user, ...other } = postInput;
       const image = await Image.createQueryBuilder()
         .insert()
@@ -65,6 +66,15 @@ export default class PostResolver {
       });
 
       await post.save();
+
+      const newPostChanel = PostChanel.create({
+        postId: post.id,
+        chanel: uuid,
+      });
+
+      await newPostChanel.save();
+
+      _io.socketsJoin(newPostChanel.chanel);
 
       return {
         code: 200,

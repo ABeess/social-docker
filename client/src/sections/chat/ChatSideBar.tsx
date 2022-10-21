@@ -1,7 +1,4 @@
 import {
-  Avatar,
-  AvatarGroup,
-  Badge,
   capitalize,
   IconButton,
   List,
@@ -20,10 +17,13 @@ import ScrollBar from 'src/components/ScrollBar';
 import TextMaxLine from 'src/components/TextMaxLine';
 import { NAVBAR } from 'src/config';
 import useRouter from 'src/hooks/useRouter';
-import { useAppSelector } from 'src/redux/hooks';
+import { useAppDispatch, useAppSelector } from 'src/redux/hooks';
+import { setEnable } from 'src/redux/slice/enabledQuery.slice';
 import { PATH_PAGE } from 'src/routes/path';
 import { User } from 'src/types/Base';
 import { fDistanceStrict } from 'src/utils/formatTime';
+import { generateNameChat } from 'src/utils/generateNameChat';
+import ChatAvatarGroup from './ChatAvatarGroup';
 import ChatSearch from './ChatSearch';
 
 const RootStyled = styled('div')(({ theme }) => ({
@@ -38,14 +38,17 @@ const RootStyled = styled('div')(({ theme }) => ({
 export default function ChatSideBar() {
   const user = useAppSelector((state) => state.auth.user) as User;
   const { push, params } = useRouter();
+  const dispatch = useAppDispatch();
 
-  const { data } = useQuery(['CONVERSATION', { user_id: user.id }], () => getConversation(user.id));
+  const { data } = useQuery(['CONVERSATION', { user_id: user.id }], () => getConversation(user.id), {
+    onSuccess() {
+      dispatch(setEnable('CONVERSATION'));
+    },
+  });
 
-  const handleSelectChat = (id: string, receiver: Array<User>) => {
+  const handleSelectChat = (id: string, receiver: Array<string>) => {
     push(PATH_PAGE.message(id), {
-      state: {
-        receiver,
-      },
+      state: receiver,
     });
   };
 
@@ -63,20 +66,18 @@ export default function ChatSideBar() {
       <ScrollBar sx={{ flex: 1, py: 1, px: 1 }}>
         <List>
           {data?.conversations?.map((item, index) => {
-            const { participants, id, title, type, lastMessage, lastSendUser, updatedAt } = item;
-
-            const newUser = participants.find((item) => item.user.id !== user.id);
-
-            console.log(lastSendUser);
+            const { participants, id, title, type, lastMessage, lastSendUser, updatedAt, owner } = item;
             const active = id === params.to;
-            const receiver: Array<User> = participants.map((item) => item.user);
-            const name = title
-              ? title
-              : type === 'groups'
-              ? participants.reduce((prev, acc) => `${prev} ${acc.user.firstName} ${acc.user.lastName},`, '')
-              : `${newUser?.user.firstName} ${newUser?.user.lastName}`;
+            const receiver: Array<string> = participants.map(({ user }) => user.id);
 
-            const avatar = participants.reduce((_, acc) => acc.user.avatar as string, '');
+            const { avatarGroup, name } = generateNameChat({
+              participants,
+              type,
+              title,
+              owner,
+              currentUserId: user.id,
+            });
+
             return (
               <ListItemButton
                 key={index}
@@ -84,21 +85,7 @@ export default function ChatSideBar() {
                 onClick={() => handleSelectChat(id, receiver)}
               >
                 <ListItemAvatar>
-                  <Badge
-                    overlap="circular"
-                    anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-                    badgeContent={
-                      type === 'groups' ? (
-                        <AvatarGroup>
-                          <Avatar src={avatar || ''} sx={{ width: 24, height: 24 }} />
-                        </AvatarGroup>
-                      ) : (
-                        <></>
-                      )
-                    }
-                  >
-                    <Avatar src={participants[0].user.avatar || ''} />
-                  </Badge>
+                  <ChatAvatarGroup type={type} mainAvatar={avatarGroup} subAvatar={user.avatar} />
                 </ListItemAvatar>
                 <ListItemText
                   primary={

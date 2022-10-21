@@ -129,10 +129,8 @@ export default class ChatResolver {
           },
           type: type,
         },
-        relations: ['participants', 'participants.user', 'lastSendUser', 'receiver'],
+        relations: ['participants', 'participants.user', 'lastSendUser', 'receiver', 'owner'],
       });
-
-      console.log(existingConversation);
 
       if (existingConversation) {
         return {
@@ -168,7 +166,6 @@ export default class ChatResolver {
       });
 
       await newConversation.save();
-      console.log(newConversation);
 
       const conversation = await Conversation.findOne({
         where: {
@@ -203,6 +200,7 @@ export default class ChatResolver {
         .execute();
 
       const room = chanel.map((x) => x.room);
+
       const newMessage = Message.create({
         conversation: {
           id: conversationId,

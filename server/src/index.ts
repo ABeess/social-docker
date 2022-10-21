@@ -23,8 +23,6 @@ const main = async (): Promise<void> => {
   // const upload = multer({ storage: multer.diskStorage({}) });
   const app = express();
 
-  console.log(process.env.ENV);
-
   const httpServer = createServer(app);
 
   const RedisStore = connectRedis(session);

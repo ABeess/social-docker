@@ -50,7 +50,7 @@ export interface NotificationQueryResponse extends QueryResponse, Typename {
 }
 
 export interface CommentResponse extends QueryResponse, Typename {
-  comments: Maybe<Array<Comment>>;
+  comments: Array<Comment>;
 }
 
 export interface CreatePostResponse extends BaseResponse, Typename {

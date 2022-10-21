@@ -11,6 +11,7 @@ export const channel = (server: httpServer) => {
 
   io.on('connection', (socket) => {
     new SocketRoom(socket);
+    // Join Room
 
     // End
   });

@@ -1,18 +1,31 @@
 import { Socket } from 'socket.io';
-import { v4 } from 'uuid';
+import PostChanel from '../entities/PostRoom';
 import UserRoom from '../entities/UserRoom';
+import { uuid } from '../utils/uuid';
 
 export default class SocketRoom {
   constructor(socket: Socket) {
+    console.log('User connect:', socket.id);
+
+    PostChanel.find({}).then((data) => {
+      const channel = data.map((room) => room.chanel);
+      socket.join(channel);
+    });
+
+    UserRoom.find({}).then((data) => {
+      const chanel = data.map((x) => x.room);
+      socket.join(chanel);
+    });
+
     socket.on('disconnect', () => {
-      console.log('user disconnect');
+      console.log('user disconnect', socket.id);
     });
 
     socket.on('CREATE_ROOM', async (userId: string, room?: string) => {
       try {
         const newRoom = UserRoom.create({
           userId,
-          room: room ? `${room}-${v4()}` : v4(),
+          room: room ? `${room}-${uuid}` : uuid,
         });
         await newRoom.save();
       } catch (error) {
@@ -26,13 +39,11 @@ export default class SocketRoom {
 
     socket.on('JOIN_ROOM', async (userId: string) => {
       try {
-        console.log('Join Room', userId);
         const userRoom = await UserRoom.find({
           where: {
             userId,
           },
         });
-        _io.emit('JOIN_ROOM', 'test');
         const room = userRoom.map((item) => item.room);
         socket.join(room);
       } catch (error) {

@@ -14,6 +14,10 @@ export const CREATE_CONVERSATION = gql`
         __typename
         receiver {
           id
+          firstName
+          lastName
+          avatar
+          createdAt
         }
         participants {
           id

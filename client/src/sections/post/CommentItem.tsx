@@ -1,16 +1,16 @@
 import { alpha, Avatar, Box, Link as MUILink, Stack, styled, SxProps, Typography } from '@mui/material';
+import { useMutation } from '@tanstack/react-query';
 import { isEmpty } from 'lodash';
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { replyComment } from 'src/api/coment.api';
 import ProfileTooltip from 'src/components/ProfileTooltip';
 import { useAppSelector } from 'src/redux/hooks';
+import { PATH_PAGE } from 'src/routes/path';
+import { Comment, Post, Reply, User } from 'src/types/Base';
+import { ReplyCommentInput } from 'src/types/InputValue';
 import { fDistanceToNow } from 'src/utils/formatTime';
 import CommentInput from './CommentInput';
-import { Link } from 'react-router-dom';
-import { PATH_DASHBOARD } from 'src/routes/path';
-import { Comment, Post, Reply, User } from 'src/types/Base';
-import { replyComment } from 'src/api/coment.api';
-import { ReplyCommentInput } from 'src/types/InputValue';
-import { useMutation } from '@tanstack/react-query';
 
 const CommentsItemStyled = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -58,7 +58,7 @@ function CommentItem({ comment, sx, handleOpenRely }: CommentItemProp) {
             <ProfileTooltip userId={String(userId)}>
               <MUILink
                 component={Link}
-                to={PATH_DASHBOARD.profile(userId as string)}
+                to={PATH_PAGE.profile(userId as string)}
                 variant="caption"
                 underline="hover"
                 color="inherit"

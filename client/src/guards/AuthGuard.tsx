@@ -3,7 +3,7 @@ import useRouter from 'src/hooks/useRouter';
 import { useAppDispatch, useAppSelector } from 'src/redux/hooks';
 import { setLocation } from 'src/redux/slice/location.slice';
 import { PATH_AUTH } from 'src/routes/path';
-import socket from 'src/utils/socket';
+// import socket from 'src/utils/socket';
 import { whiteListUrl } from 'src/utils/whitelistUrl';
 
 interface IAuthGuard {
@@ -11,7 +11,7 @@ interface IAuthGuard {
 }
 
 export const AuthGuard = ({ children }: IAuthGuard) => {
-  const { isAuthenticated, user } = useAppSelector((state) => state.auth);
+  const { isAuthenticated } = useAppSelector((state) => state.auth);
   const locationPath = useAppSelector((state) => state.location.path);
   const dispatch = useAppDispatch();
   const { replace, pathname } = useRouter();
@@ -25,11 +25,11 @@ export const AuthGuard = ({ children }: IAuthGuard) => {
     }
   }, [isAuthenticated, pathname]);
 
-  useEffect(() => {
-    if (isAuthenticated) {
-      socket?.emit('JOIN_ROOM', user?.id);
-    }
-  }, [pathname]);
+  // useEffect(() => {
+  //   if (isAuthenticated) {
+  //     socket?.emit('JOIN_ROOM', user?.id);
+  //   }
+  // }, [pathname]);
 
   return <>{children}</>;
 };

@@ -1,11 +1,13 @@
 import { isEmpty } from 'lodash';
 import { Arg, Mutation, Query, Resolver } from 'type-graphql';
 import { In, Not } from 'typeorm';
+import Conversation from '../entities/Conversation';
 import Friendship from '../entities/Friendship';
 import User from '../entities/User';
 import UserProfile from '../entities/UserProfile';
 import { UserProfileInput } from '../inputs/UserProfileInput';
 import { HoverCardResponse } from '../response/HoverCardResponse';
+import { MessageHeaderResponse } from '../response/MessageResponse';
 import {
   ProfileUserResponse,
   ResponseMutation,
@@ -75,8 +77,6 @@ export default class UserResolver {
       },
     });
 
-    console.log(user);
-
     return {
       isFriend: !isEmpty(friend),
       user: user as User,
@@ -108,6 +108,36 @@ export default class UserResolver {
       };
     } catch (error) {
       return generateError(error);
+    }
+  }
+
+  @Query(() => MessageHeaderResponse)
+  async messageHeader(@Arg('conversationId') id: string): Promise<MessageHeaderResponse> {
+    try {
+      if (!id) {
+        return {
+          code: 404,
+          message: 'Missing the parameter "id"',
+        };
+      }
+
+      const conversation = await Conversation.findOne({
+        where: {
+          id,
+        },
+        relations: ['receiver', 'owner'],
+      });
+      return {
+        code: 200,
+        message: 'Message Header',
+        owner: conversation?.owner,
+        receiver: conversation?.receiver,
+      };
+    } catch (error) {
+      return {
+        code: 500,
+        message: error.message || 'Interval server error!',
+      };
     }
   }
 
@@ -145,8 +175,6 @@ export default class UserResolver {
           .set(other)
           .returning('*')
           .execute();
-
-        console.log(updateProfile);
 
         return {
           code: 200,

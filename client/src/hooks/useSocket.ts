@@ -1,18 +1,20 @@
-export default function useSocket() {
-  // const [socket, setSocket] = useState<Maybe<Socket>>(null);
+import { useEffect, useState } from 'react';
+import { listen } from 'src/api/listen.api';
+import { Maybe } from 'src/types';
+import socket from 'src/utils/socket';
 
-  // useEffect(() => {
-  //   const socketIo = io('http://localhost:3089', { withCredentials: true });
+export default function useSocket<Type>(room: string): Maybe<Type> {
+  const [response, setResponse] = useState<Maybe<Type>>(null);
 
-  //   setSocket(socketIo);
+  useEffect(() => {
+    listen(room, (response: Type) => {
+      setResponse(response);
+    });
 
-  //   const cleanup = () => {
-  //     socketIo.disconnect();
-  //   };
-  //   return cleanup;
-  // }, []);
+    return () => {
+      socket.removeListener(room);
+    };
+  }, []);
 
-  // return socket;
-
-  return null;
+  return response;
 }

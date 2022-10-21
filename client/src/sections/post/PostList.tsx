@@ -19,7 +19,7 @@ import Iconify from 'src/components/Iconify';
 import PreviewImageMultiple from 'src/components/PreviewImageMultiple';
 import ProfileTooltip from 'src/components/ProfileTooltip';
 import { useAppSelector } from 'src/redux/hooks';
-import { PATH_DASHBOARD } from 'src/routes/path';
+import { PATH_PAGE } from 'src/routes/path';
 import { Post } from 'src/types/Base';
 import { CurrentLike, LikePostResponse } from 'src/types/Response';
 import { fDistanceToNow } from 'src/utils/formatTime';
@@ -110,7 +110,7 @@ export default function PostList({ post }: PostListProps) {
     }));
   };
 
-  const linkTo = (id: string) => PATH_DASHBOARD.profile(id);
+  const linkTo = (id: string) => PATH_PAGE.profile(id);
 
   return (
     <RootStyled>

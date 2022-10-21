@@ -1,5 +1,6 @@
 import { Arg, Mutation, Query, Resolver, UseMiddleware } from 'type-graphql';
 import Comment from '../entities/Comment';
+import PostChanel from '../entities/PostRoom';
 import ReplyCommentPost from '../entities/Reply';
 import { CommentInput, ReplyInput } from '../inputs/CommentInput';
 import { QueryInput } from '../inputs/QueryInput';
@@ -8,6 +9,7 @@ import { CreateCommentResponse, ReplyResponse } from '../response/CommentRespons
 import { CommentListResponse } from '../response/PostResponse';
 import { queryGenerate } from '../utils/queryGenerate';
 import { generateError } from '../utils/responseError';
+import { uuid } from '../utils/uuid';
 
 @Resolver()
 export default class CommentResolver {
@@ -35,9 +37,13 @@ export default class CommentResolver {
         },
         relations: ['author'],
       });
-      _io.to(postId).emit('POST_COMMENT', {
+
+      const room = await PostChanel.findOneBy({ postId });
+
+      _io.to(room?.chanel || uuid).emit('POST_COMMENT', {
         data: comment,
         type: 'comment',
+        postId,
       });
 
       return {
@@ -45,7 +51,10 @@ export default class CommentResolver {
         message: 'Comment Post',
       };
     } catch (error) {
-      return generateError(error);
+      return {
+        code: 500,
+        message: error.message || 'interval server error',
+      };
     }
   }
 
@@ -65,9 +74,12 @@ export default class CommentResolver {
 
       await newReply.save();
 
-      _io.to(postId).emit('POST_COMMENT', {
+      const room = await PostChanel.findOneBy({ postId });
+
+      _io.to(room?.chanel || uuid).emit('POST_COMMENT', {
         data: newReply,
         type: 'reply',
+        postId,
       });
       return {
         code: 200,

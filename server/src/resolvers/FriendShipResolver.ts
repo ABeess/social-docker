@@ -141,8 +141,6 @@ export class FriendshipResolver {
       take: limit,
     });
 
-    console.log(friendRequest);
-
     return {
       totalCount,
       totalPage: Math.ceil(totalCount / Number(limit)),

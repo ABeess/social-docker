@@ -1,24 +1,18 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { User } from 'src/types/Base';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-export interface ModalState {
-  user: Partial<User>;
-}
+type ReceiverType = Array<string>;
 
-const initialState: ModalState = {
-  user: {},
-};
+const initialState: ReceiverType = [];
 
 export const receiverSlice = createSlice({
   name: 'receiver',
   initialState,
   reducers: {
-    setReceiver: (state, action) => {
-      state.user = action.payload;
-    },
+    setReceiver: (_, action: PayloadAction<ReceiverType>) => action.payload,
+    resetReceiver: () => [],
   },
 });
 
-export const { setReceiver } = receiverSlice.actions;
+export const { setReceiver, resetReceiver } = receiverSlice.actions;
 
 export default receiverSlice.reducer;

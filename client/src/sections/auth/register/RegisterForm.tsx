@@ -7,11 +7,15 @@ import { useSnackbar } from 'notistack';
 import { useForm } from 'react-hook-form';
 import { registerRequest } from 'src/api/auth.api';
 import { FormProvider, RHFTextField } from 'src/components/hook-form';
+import useRouter from 'src/hooks/useRouter';
+import { PATH_AUTH } from 'src/routes/path';
 import { RegisterValues } from 'src/types/InputValue';
 import socket from 'src/utils/socket';
 import * as Yup from 'yup';
 
 export default function RegisterForm() {
+  const { push } = useRouter();
+
   const RegisterSchema = Yup.object().shape({
     firstName: Yup.string().required(),
     lastName: Yup.string().required(),
@@ -40,6 +44,7 @@ export default function RegisterForm() {
       if (response?.code === 201) {
         enqueueSnackbar(response.message);
         socket?.emit('CREATE_ROOM', response.user?.id);
+        push(PATH_AUTH.login);
       } else {
         enqueueSnackbar(response?.message, { variant: 'error' });
       }

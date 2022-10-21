@@ -1,7 +1,7 @@
 import { Button, styled, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 import { Link } from 'react-router-dom';
-import { PATH_DASHBOARD } from 'src/routes/path';
+import { PATH_PAGE } from 'src/routes/path';
 
 const RootStyled = styled('div')(() => ({
   display: 'flex',
@@ -26,7 +26,7 @@ export default function NotFound() {
           mb: 2,
         }}
       /> */}
-        <Link to={PATH_DASHBOARD.root || '/'}>
+        <Link to={PATH_PAGE.root || '/'}>
           <Button variant="contained" size="large">
             Go to Home
           </Button>

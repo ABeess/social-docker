@@ -9,23 +9,24 @@ import CollapseSideBarProvider from './contexts/CollapseSideBarContext';
 import SettingContextProvider from './contexts/SettingContext';
 import store, { persistor } from './redux/store';
 import ThemeProvider from './theme';
+import React from 'react';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  // <React.StrictMode>
-  <ReduxProvider store={store}>
-    <PersistGate loading={null} persistor={persistor}>
-      <HelmetProvider>
-        <CookiesProvider>
-          <CollapseSideBarProvider>
-            <SettingContextProvider>
-              <ThemeProvider>
-                <App />
-              </ThemeProvider>
-            </SettingContextProvider>
-          </CollapseSideBarProvider>
-        </CookiesProvider>
-      </HelmetProvider>
-    </PersistGate>
-  </ReduxProvider>
-  // </React.StrictMode>
+  <React.StrictMode>
+    <ReduxProvider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <HelmetProvider>
+          <CookiesProvider>
+            <CollapseSideBarProvider>
+              <SettingContextProvider>
+                <ThemeProvider>
+                  <App />
+                </ThemeProvider>
+              </SettingContextProvider>
+            </CollapseSideBarProvider>
+          </CookiesProvider>
+        </HelmetProvider>
+      </PersistGate>
+    </ReduxProvider>
+  </React.StrictMode>
 );

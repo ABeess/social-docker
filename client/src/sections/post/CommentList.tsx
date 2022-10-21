@@ -1,13 +1,12 @@
 import { styled, Typography } from '@mui/material';
 import { useInfiniteQuery, useMutation } from '@tanstack/react-query';
 import { flatten, isEmpty } from 'lodash';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { createComment, getCommentByPost } from 'src/api/coment.api';
 import { useAppSelector } from 'src/redux/hooks';
-import { Comment, Post, Reply, User } from 'src/types/Base';
+import { Post, User } from 'src/types/Base';
 import { CreateCommentInput } from 'src/types/InputValue';
 import { CommentResponse } from 'src/types/Response';
-import socket from 'src/utils/socket';
 import CommentInput from './CommentInput';
 import CommentItemRoot from './CommentItem';
 
@@ -21,57 +20,26 @@ interface CommentListProps {
   post: Post;
 }
 
-interface CommentState extends Pick<CommentResponse, 'totalCount'> {
-  comments: Array<Comment>;
-}
-
 export default function CommentList({ post }: CommentListProps) {
-  const [commentResponse, setCommentResponse] = useState<CommentState>({
-    comments: [],
-    totalCount: 0,
-  });
+  const [remainingComment, setRemainingComment] = useState(0);
 
-  const { comments, totalCount } = commentResponse;
   const user = useAppSelector((state) => state.auth.user) as User;
 
   const [message, setMessage] = useState('');
 
-  const { hasNextPage, fetchNextPage } = useInfiniteQuery(
+  const { hasNextPage, fetchNextPage, data } = useInfiniteQuery(
     ['COMMENTS_POST', { post: post.id }],
     ({ pageParam }) => getCommentByPost(post.id, { limit: 3, page: pageParam }),
     {
       getNextPageParam: ({ page, totalPage }) => (page < totalPage - 1 ? page + 1 : undefined),
       onSuccess(data) {
         if (!isEmpty(data)) {
-          const lastData = data.pages.slice(-1).pop();
-          setCommentResponse(() => ({
-            totalCount: lastData?.totalCount as number,
-            comments: flatten(data.pages.map((page) => page.comments)) as Comment[],
-          }));
+          const { page, perPage, totalCount } = data.pages.slice(-1).pop() as CommentResponse;
+          setRemainingComment(totalCount - (page + 1 * perPage));
         }
       },
     }
   );
-  useEffect(() => {
-    socket.on('POST_COMMENT', (response) => {
-      if (response && response.type === 'comment') {
-        setCommentResponse((prev) => ({
-          ...prev,
-          comments: [{ ...(response.data as Comment), reply: [] }, ...(prev.comments as Comment[])],
-        }));
-      }
-      if (response && response.type === 'reply') {
-        const commentId = response.data.parent.id;
-        const reply = response.data;
-        setCommentResponse((prev) => ({
-          ...prev,
-          comments: prev.comments?.map((comment) =>
-            comment.id !== commentId ? comment : { ...comment, reply: [reply, ...(comment.reply as Array<Reply>)] }
-          ),
-        }));
-      }
-    });
-  }, []);
 
   const { mutateAsync: sendComment } = useMutation((value: CreateCommentInput) => createComment(value));
 
@@ -91,8 +59,8 @@ export default function CommentList({ post }: CommentListProps) {
   return (
     <RootStyled>
       <CommentInput value={message} setValue={setMessage} handleSubmit={handleSendComment} />
-      {!isEmpty(comments) &&
-        comments?.map((comment) => (
+      {data &&
+        flatten(data?.pages.map((page) => page.comments)).map((comment) => (
           <div key={comment.id}>
             <CommentItemRoot key={comment.id} comment={comment} post={post} />
           </div>
@@ -110,7 +78,7 @@ export default function CommentList({ post }: CommentListProps) {
             },
           }}
         >
-          See more {Number(totalCount) - Number(comments?.length)} comments
+          See more {remainingComment} comments
         </Typography>
       )}
     </RootStyled>

@@ -11,6 +11,13 @@ export const GET_CONVERSATION = gql`
         type
         lastMessage
         updatedAt
+        owner {
+          id
+          firstName
+          lastName
+          avatar
+          createdAt
+        }
         lastSendUser {
           id
           firstName
@@ -20,6 +27,10 @@ export const GET_CONVERSATION = gql`
         }
         receiver {
           id
+          firstName
+          lastName
+          avatar
+          createdAt
         }
         participants {
           id

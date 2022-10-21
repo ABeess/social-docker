@@ -12,7 +12,7 @@ export interface FileType extends File {
 
 export type User = {
   __typename?: 'User';
-  avatar?: Maybe<string>;
+  avatar: string;
   comment?: Maybe<Comment>;
   createdAt: Date;
   email: Maybe<string>;
@@ -126,7 +126,7 @@ export type Image = {
 };
 
 export interface Conversation extends Model {
-  title: Maybe<string>;
+  title: string;
   type: 'groups' | 'private';
   owner: User;
   receiver: Array<User>;

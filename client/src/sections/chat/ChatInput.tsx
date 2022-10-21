@@ -1,5 +1,5 @@
-import { IconButton, Input, InputAdornment, styled } from '@mui/material';
-import { ChangeEventHandler, Dispatch } from 'react';
+import { CircularProgress, IconButton, Input, InputAdornment, styled } from '@mui/material';
+import { ChangeEventHandler, Dispatch, KeyboardEvent } from 'react';
 import EmojiPicker from 'src/components/EmojiPicker';
 import Iconify from 'src/components/Iconify';
 
@@ -15,6 +15,7 @@ const InputStyled = styled('div')(({ theme }) => ({
   borderTop: `1px dashed ${theme.palette.divider}`,
   minHeight: 56,
   paddingLeft: theme.spacing(2),
+  paddingRight: theme.spacing(1),
   flex: 1,
   display: 'flex',
   alignItems: 'center',
@@ -28,9 +29,15 @@ interface ChatInputProps {
   value: string;
   setValue: Dispatch<string>;
   sendSubmit: () => void;
+  loading?: boolean;
 }
 
-export default function ChatInput({ value, onChange, setValue, sendSubmit }: ChatInputProps) {
+export default function ChatInput({ value, onChange, setValue, sendSubmit, loading }: ChatInputProps) {
+  const handleKeyUp = ({ key }: KeyboardEvent<HTMLInputElement>) => {
+    if (key === 'Enter') {
+      sendSubmit();
+    }
+  };
   return (
     <RootStyled>
       <InputStyled>
@@ -39,6 +46,7 @@ export default function ChatInput({ value, onChange, setValue, sendSubmit }: Cha
           disableUnderline
           value={value}
           onChange={onChange}
+          onKeyUp={handleKeyUp}
           placeholder="Message"
           endAdornment={
             <InputAdornment position="start" sx={{ gap: 1, mr: 1 }}>
@@ -48,9 +56,13 @@ export default function ChatInput({ value, onChange, setValue, sendSubmit }: Cha
 
               <EmojiPicker setValue={setValue} value={value} size="small" />
 
-              <IconButton size="small" onClick={sendSubmit}>
-                <Iconify icon="fluent:send-20-regular" />
-              </IconButton>
+              {loading ? (
+                <CircularProgress size={18} />
+              ) : (
+                <IconButton size="small" onClick={sendSubmit}>
+                  <Iconify icon="fluent:send-20-regular" />
+                </IconButton>
+              )}
             </InputAdornment>
           }
         />

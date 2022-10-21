@@ -25,13 +25,13 @@ import Popover from 'src/components/Popover';
 import NotificationSkeleton from 'src/components/skeleton/NotificationSkeleton';
 import TextMaxLine from 'src/components/TextMaxLine';
 import useRouter from 'src/hooks/useRouter';
+import useSocket from 'src/hooks/useSocket';
 import { useAppSelector } from 'src/redux/hooks';
-import { PATH_DASHBOARD } from 'src/routes/path';
+import { PATH_PAGE } from 'src/routes/path';
 import { Notification } from 'src/types/Base';
 import { MaskAsReadInput } from 'src/types/InputValue';
 import { NotificationQueryResponse } from 'src/types/Response';
 import { fDistanceToNow } from 'src/utils/formatTime';
-import socket from 'src/utils/socket';
 
 const NotificationPopover = () => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
@@ -68,16 +68,17 @@ const NotificationPopover = () => {
       },
     }
   );
+
+  const socketNotification = useSocket<Notification>('NOTIFICATION');
   useEffect(() => {
-    socket.on('NOTIFICATION', (response: Notification) => {
-      console.log(response);
+    if (socketNotification) {
       setNotificationState((prev) => ({
         ...prev,
         totalUnread: prev.totalUnread + 1,
-        notifications: [response as Notification, ...(prev.notifications as Notification[])],
+        notifications: [socketNotification, ...(prev.notifications as Notification[])],
       }));
-    });
-  }, []);
+    }
+  }, [socketNotification]);
 
   const handleOpenPopover = (event: MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -114,12 +115,12 @@ const NotificationPopover = () => {
       }
 
       if (type === 'Friend request') {
-        push(PATH_DASHBOARD.lookingFriend);
+        push(PATH_PAGE.lookingFriend);
         handleClosePopover();
       }
 
       if (type === 'Friend accepted') {
-        push(PATH_DASHBOARD.profile(requester.id as string));
+        push(PATH_PAGE.profile(requester.id as string));
         handleClosePopover();
       }
     } catch (error) {
