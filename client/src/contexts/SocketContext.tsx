@@ -1,6 +1,6 @@
 import { createContext, ReactElement, useEffect, useRef } from 'react';
 import { io, Socket } from 'socket.io-client';
-import { Maybe } from 'src/generated/graphql';
+import { Maybe } from 'src/types';
 
 interface IInitialState {
   socket?: Maybe<Socket>;

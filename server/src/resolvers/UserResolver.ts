@@ -5,7 +5,7 @@ import Conversation from '../entities/Conversation';
 import Friendship from '../entities/Friendship';
 import User from '../entities/User';
 import UserProfile from '../entities/UserProfile';
-import { UserProfileInput } from '../inputs/UserProfileInput';
+import { UpdateThumbnailInput, UserProfileInput } from '../inputs/UserProfileInput';
 import { HoverCardResponse } from '../response/HoverCardResponse';
 import { MessageHeaderResponse } from '../response/MessageResponse';
 import {
@@ -217,6 +217,34 @@ export default class UserResolver {
       return {
         code: 500,
         message: error.message,
+      };
+    }
+  }
+
+  @Mutation(() => ResponseMutation)
+  async updateThumbnail(
+    @Arg('data') { url, userId }: UpdateThumbnailInput
+  ): Promise<ResponseMutation> {
+    try {
+      await UserProfile.update(
+        {
+          user: {
+            id: userId,
+          },
+        },
+        {
+          thumbnail: url,
+        }
+      );
+
+      return {
+        code: 200,
+        message: 'Update Thumbnail',
+      };
+    } catch (error) {
+      return {
+        code: 500,
+        message: error.message || 'Interval server error',
       };
     }
   }

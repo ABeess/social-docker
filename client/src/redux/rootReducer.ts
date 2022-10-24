@@ -8,6 +8,7 @@ import userRecommendReducer from './slice/userRecommend.slice';
 import modalReducer from './slice/modal.slice';
 import receiverReducer from './slice/receiver.slice';
 import enableReducer from './slice/enabledQuery.slice';
+import playerMediaReducer from './slice/playerMedia.slice';
 const rootReducer = combineReducers({
   auth: persistReducer(userPersist, userReducer),
   location: persistReducer(locationPersist, locationReducer),
@@ -16,6 +17,7 @@ const rootReducer = combineReducers({
   modal: modalReducer,
   receiver: receiverReducer,
   enableQuery: enableReducer,
+  playerMedia: playerMediaReducer,
 });
 
 export default rootReducer;

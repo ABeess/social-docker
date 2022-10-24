@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { Friendship } from 'src/generated/graphql';
+import { Friendship } from 'src/types/Base';
 import { FriendShipRequestResponse } from 'src/types/Response';
 
 const initialState: FriendShipRequestResponse = {

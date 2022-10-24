@@ -5,16 +5,16 @@ import { UnauthorizedRest } from '../lib/errorHandle';
 import { UseJWTPayload } from '../types/index';
 import { setCookie } from '../utils/cookies';
 import { generateToken } from '../utils/jwtManger';
-import { redis } from '../utils/redis';
+// import { redis } from '../utils/redis';
 const Router = express.Router();
 
 Router.post('/refreshToken', async (req: Request, res: Response) => {
   try {
-    const cookies = req.signedCookies['refresh-token'];
+    const refreshToken = req.signedCookies['refresh-token'];
 
-    const refreshToken = await redis.get(`token:${cookies}`);
+    // const refreshToken = await redis.get(`token:${cookies}`);
 
-    if (!refreshToken || !cookies) {
+    if (!refreshToken || !refreshToken) {
       throw new UnauthorizedRest('You are not authenticated "cookie"');
     }
 
@@ -48,11 +48,11 @@ Router.post('/refreshToken', async (req: Request, res: Response) => {
       form: 'refreshToken',
     });
 
-    await redis.set(existingUser.id, newRefreshToken);
+    // await redis.set(existingUser.id, newRefreshToken);
 
     setCookie({
       res,
-      data: existingUser.id,
+      data: newRefreshToken,
       name: 'refresh-token',
     });
 

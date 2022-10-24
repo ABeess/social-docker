@@ -1,6 +1,6 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Maybe } from 'src/types';
-import { User } from 'src/types/Base';
+import { User, UserProfile } from 'src/types/Base';
 
 export interface UserState {
   user: Maybe<User>;
@@ -34,16 +34,29 @@ export const userSlice = createSlice({
     updateUser: (state, action) => {
       state.user = action.payload;
     },
-    updateProfile: (state, action) => {
+    updateProfileRedux: (state, action: PayloadAction<UserProfile>) => {
       state.user = { ...state.user, profile: action.payload } as User;
     },
     updateAvatarRedux: (state, action) => {
       state.user = { ...state.user, avatar: action.payload } as User;
     },
+    updateThumbnailRedux: (state, action: PayloadAction<string>) => {
+      state.user = {
+        ...state.user,
+        profile: { ...state.user?.profile, thumbnail: action.payload } as UserProfile,
+      } as User;
+    },
   },
 });
 
-export const { userLogout, refreshToken, loginSuccess, updateUser, updateProfile, updateAvatarRedux } =
-  userSlice.actions;
+export const {
+  userLogout,
+  refreshToken,
+  loginSuccess,
+  updateUser,
+  updateProfileRedux,
+  updateAvatarRedux,
+  updateThumbnailRedux,
+} = userSlice.actions;
 
 export default userSlice.reducer;

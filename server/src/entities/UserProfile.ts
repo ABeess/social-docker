@@ -6,35 +6,35 @@ import User from './User';
 @Entity()
 @ObjectType()
 export default class UserProfile extends Model {
-  @Column()
+  @Column({ default: '' })
   @Field()
   liveAt: string;
 
-  @Column()
+  @Column({ default: '' })
   @Field()
   ward: string;
 
-  @Column()
+  @Column({ default: '' })
   @Field()
   province: string;
 
-  @Column()
+  @Column({ default: '' })
   @Field()
   district: string;
 
-  @Column()
+  @Column({ default: '' })
   @Field()
   gender: string;
 
-  @Column()
+  @Column({ default: '' })
   @Field()
   dayOfBirth: string;
 
-  @Column()
+  @Column({ default: '' })
   @Field()
   phoneNumber: string;
 
-  @Column()
+  @Column({ default: '' })
   @Field()
   story: string;
 

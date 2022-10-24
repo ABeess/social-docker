@@ -2,8 +2,10 @@ import {
   AddFriendResponse,
   createConversationResponse,
   CreatePostResponse,
+  CreateStreamResponse,
   LikePostResponse,
   MutationResponse,
+  SendStreamChatResponse,
   UpdateUserProfileResponse,
   UserResponse,
 } from './Response';
@@ -22,6 +24,10 @@ export type Mutation = {
   updateProfile: UpdateUserProfileResponse;
   createConversation: createConversationResponse;
   uploadAvatar: MutationResponse;
+  updateThumbnail: MutationResponse;
+  createStream: CreateStreamResponse;
+  sendStreamChat: SendStreamChatResponse;
+  unLoadStream: MutationResponse;
 };
 
 export type LoginMutation = Pick<Mutation, 'login'>;
@@ -37,3 +43,7 @@ export type UnLikePostMutation = Pick<Mutation, 'unLikePost'>;
 export type UpdateProfileMutation = Pick<Mutation, 'updateProfile'>;
 export type CreateConversationMutation = Pick<Mutation, 'createConversation'>;
 export type UploadAvatarMutation = Pick<Mutation, 'uploadAvatar'>;
+export type UploadThumbnailMutation = Pick<Mutation, 'updateThumbnail'>;
+export type CreateStreamMutation = Pick<Mutation, 'createStream'>;
+export type SendStreamChatMutation = Pick<Mutation, 'sendStreamChat'>;
+export type UnloadStreamMutation = Pick<Mutation, 'unLoadStream'>;

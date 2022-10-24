@@ -1,6 +1,6 @@
-import { GET_PROFILE_USER, UPDATE_PROFILE, UPLOAD_AVATAR } from 'src/graphql/userQuery';
+import { GET_PROFILE_USER, UPDATE_PROFILE, UPDATE_THUMBNAIL, UPLOAD_AVATAR } from 'src/graphql/userQuery';
 import { ProfileInput } from 'src/types/InputValue';
-import { UpdateProfileMutation, UploadAvatarMutation } from 'src/types/MutationResponse';
+import { UpdateProfileMutation, UploadAvatarMutation, UploadThumbnailMutation } from 'src/types/MutationResponse';
 import { ProfileUserQuery } from 'src/types/QueryResponse';
 import app from 'src/utils/graphqlRequest';
 
@@ -18,15 +18,22 @@ export const updateProfile = async (data: ProfileInput) => {
   return updateProfile;
 };
 
-export interface IUploadAvatar {
+export interface IUploadImage {
   userId: string;
   url: string;
 }
-export const uploadAvatar = async ({ url, userId }: IUploadAvatar) => {
+export const uploadAvatar = async ({ url, userId }: IUploadImage) => {
   const { uploadAvatar }: UploadAvatarMutation = await app.request(UPLOAD_AVATAR, {
     userId,
     url,
   });
 
   return uploadAvatar;
+};
+
+export const updateThumbnail = async (data: IUploadImage) => {
+  const { updateThumbnail }: UploadThumbnailMutation = await app.request(UPDATE_THUMBNAIL, {
+    data,
+  });
+  return updateThumbnail;
 };

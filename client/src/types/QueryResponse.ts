@@ -1,4 +1,4 @@
-import { Post } from 'src/generated/graphql';
+import { Post } from './Base';
 import {
   CommentResponse,
   FriendShipRecommendResponse,
@@ -12,6 +12,9 @@ import {
   ListChatSideBarResponse,
   ListChatResponse,
   ConversationResponse,
+  GeStreamResponse,
+  GetStreamChatResponse,
+  GetDetailStreamResponse,
 } from './Response';
 
 export type Query = {
@@ -29,6 +32,9 @@ export type Query = {
   listSideBar: ListChatSideBarResponse;
   getChats: ListChatResponse;
   getConversations: ConversationResponse;
+  getLiveStream: GeStreamResponse;
+  getStreamChat: GetStreamChatResponse;
+  getDetailStream: GetDetailStreamResponse;
 };
 
 export type AllPostResponse = QueryResponse & {
@@ -53,3 +59,6 @@ export type FriendListQuery = Pick<Query, 'getFriends'>;
 export type ListChatSideBarQuery = Pick<Query, 'listSideBar'>;
 export type ListChatQuery = Pick<Query, 'getChats'>;
 export type ConversationQuery = Pick<Query, 'getConversations'>;
+export type GetStreamQuery = Pick<Query, 'getLiveStream'>;
+export type GetStreamChatQuery = Pick<Query, 'getStreamChat'>;
+export type GetDetailStreamQuery = Pick<Query, 'getDetailStream'>;

@@ -1,4 +1,4 @@
-version: '3.3'
+version: "3.3"
 services:
   server:
     image: node:16-alpine
@@ -10,8 +10,10 @@ services:
       - ./server:/src/server
     working_dir: /src/server
     ports:
-      - '3089:3089'
-    restart: 'always'
+      - "3089:3089"
+    restart: "always"
+    depends_on:
+      - redis
     networks:
       - proxy
 
@@ -25,15 +27,15 @@ services:
       - ./client:/src/client
     working_dir: /src/client
     ports:
-      - '3030:3030'
-    restart: 'always'
+      - "3030:3030"
+    restart: "always"
     networks:
       - proxy
 
   postgres:
     image: postgres:13.1
     healthcheck:
-      test: ['CMD', 'pg_isready', '-q', '-d', 'postgres', '-U']
+      test: ["CMD", "pg_isready", "-q", "-d", "postgres", "-U"]
       timeout: 45s
       interval: 10s
       retries: 10
@@ -57,14 +59,14 @@ services:
     environment:
       PGADMIN_DEFAULT_EMAIL: abeesdevjs@gmail.com
       PGADMIN_DEFAULT_PASSWORD: abees
-      PGADMIN_CONFIG_SERVER_MODE: 'False'
+      PGADMIN_CONFIG_SERVER_MODE: "False"
     volumes:
       - pgadmin:/var/lib/pgadmin
 
     ports:
-      - '5050:80'
+      - "5050:80"
     logging:
-      driver: 'none'
+      driver: "none"
 
     restart: unless-stopped
     networks:
@@ -72,15 +74,16 @@ services:
   redis:
     image: redis:latest
     container_name: redis
-    command: redis-server --appendonly yes
+    command: redis-server --requirepass abeesdevjs --appendonly yes
     ports:
       - 6379:6379
     healthcheck:
-      test: ['CMD-SHELL', "sh -c 'redis-cli PING'"]
+      test: ["CMD-SHELL", "sh -c 'redis-cli PING'"]
       interval: 30s
       timeout: 30s
       retries: 3
-    restart: 'on-failure'
+    restart: "on-failure"
+
     networks:
       - proxy
 networks:

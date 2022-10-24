@@ -15,6 +15,11 @@ import CallRoundedIcon from '@mui/icons-material/CallRounded';
 import VideocamRoundedIcon from '@mui/icons-material/VideocamRounded';
 import MoreHorizRoundedIcon from '@mui/icons-material/MoreHorizRounded';
 import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
+import EmailIcon from '@mui/icons-material/Email';
+import DoneIcon from '@mui/icons-material/Done';
+import VideoCameraBackOutlinedIcon from '@mui/icons-material/VideoCameraBackOutlined';
+import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 export {
   NotificationsIcon,
   SettingsIcon,
@@ -33,4 +38,9 @@ export {
   VideocamRoundedIcon,
   MoreHorizRoundedIcon,
   MoreVertRoundedIcon,
+  EmailIcon,
+  DoneIcon,
+  VideoCameraBackOutlinedIcon,
+  PlayCircleOutlineIcon,
+  VisibilityIcon,
 };

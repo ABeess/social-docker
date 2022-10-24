@@ -25,6 +25,8 @@ export const uploadSingleStore = (file: MulterFile): UploadResponse => {
 
   blobStream.end(file.buffer);
 
+  // return Promise.resolve();
+
   return {
     url: `https://storage.googleapis.com/${bucket.name}/${blob.name}`,
     type,
@@ -52,4 +54,6 @@ export const uploadMultipleStore = (files: MulterFiles) => {
   });
 
   return uploads;
+
+  // return Promise.resolve(uploads);
 };

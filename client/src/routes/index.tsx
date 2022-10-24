@@ -1,5 +1,5 @@
 import { lazy, LazyExoticComponent, Suspense } from 'react';
-import { createBrowserRouter, useRoutes } from 'react-router-dom';
+import { createBrowserRouter } from 'react-router-dom';
 import GuestGuard from 'src/guards/GuestGuard';
 import Layout from 'src/layouts';
 // import Layout from 'src/layouts';
@@ -26,49 +26,9 @@ const PostPage = Loadable(lazy(() => import('src/pages/home/Post')));
 const LookingFriend = Loadable(lazy(() => import('src/pages/home/LookingFriend')));
 const Profile = Loadable(lazy(() => import('src/pages/home/Profile')));
 const Message = Loadable(lazy(() => import('src/pages/home/Message')));
-
-export default function Router() {
-  return useRoutes([
-    {
-      path: 'auth',
-      children: [
-        {
-          path: 'login',
-          element: <Login />,
-        },
-        {
-          path: 'register',
-          element: <Register />,
-        },
-      ],
-    },
-    {
-      path: '/',
-      // element: <Layout />,
-      element: <PostPage />,
-
-      children: [
-        // { element: <PostPage />, index: true },
-        {
-          path: 'post',
-          element: <PostPage />,
-        },
-        {
-          path: 'lookingfriend',
-          element: <LookingFriend />,
-        },
-        {
-          path: 'profile/:id',
-          element: <Profile />,
-        },
-        {
-          path: 'message/t/:to',
-          element: <Message />,
-        },
-      ],
-    },
-  ]);
-}
+const Broadcast = Loadable(lazy(() => import('src/pages/home/LiveStream')));
+const CreateStream = Loadable(lazy(() => import('src/pages/home/CreateStream')));
+const StreamDetail = Loadable(lazy(() => import('src/pages/home/StreamDetails')));
 
 export const router = createBrowserRouter([
   {
@@ -112,6 +72,18 @@ export const router = createBrowserRouter([
       {
         path: 'message/t/:to',
         element: <Message />,
+      },
+      {
+        path: 'live/create',
+        element: <CreateStream />,
+      },
+      {
+        path: 'broadcast',
+        element: <Broadcast />,
+      },
+      {
+        path: 'broadcast/live/:stream_key',
+        element: <StreamDetail />,
       },
     ],
   },

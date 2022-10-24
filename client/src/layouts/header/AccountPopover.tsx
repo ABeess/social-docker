@@ -5,14 +5,17 @@ import { Link } from 'react-router-dom';
 import { logoutRequest } from 'src/api/auth.api';
 import MyAvatar from 'src/components/MyAvatar';
 import Popover from 'src/components/Popover';
+import useRouter from 'src/hooks/useRouter';
 import { useAppDispatch, useAppSelector } from 'src/redux/hooks';
 import { userLogout } from 'src/redux/slice/auth.slice';
-import { PATH_PAGE } from 'src/routes/path';
+import { PATH_AUTH, PATH_PAGE } from 'src/routes/path';
 
 export default function AccountPopover() {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
   const user = useAppSelector((state) => state.auth.user);
+
+  const { push } = useRouter();
 
   const handleOpenPopover = (event: MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -21,6 +24,9 @@ export default function AccountPopover() {
   const dispatch = useAppDispatch();
 
   const { mutate } = useMutation(() => logoutRequest(), {
+    onMutate() {
+      push(PATH_AUTH.login);
+    },
     onSuccess() {
       dispatch(userLogout());
     },
@@ -46,7 +52,13 @@ export default function AccountPopover() {
       >
         <List disablePadding>
           <Box p={1}>
-            <MUILink component={Link} underline="none" to={PATH_PAGE.profile(user?.id as string)} color="text.primary">
+            <MUILink
+              component={Link}
+              underline="none"
+              to={PATH_PAGE.profile(user?.id as string)}
+              color="text.primary"
+              onClick={handleClosePopover}
+            >
               <ListItemButton dense sx={{ borderRadius: 1 }}>
                 <ListItemText primary={<Typography variant="body2">Profile</Typography>} />
               </ListItemButton>

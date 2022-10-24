@@ -4,7 +4,7 @@ import IconButtonAnimate from 'src/components/animate/IconButtonAnimate';
 import EmojiPicker from 'src/components/EmojiPicker';
 import Iconify from 'src/components/Iconify';
 import MyAvatar from 'src/components/MyAvatar';
-import { Comment, Post } from 'src/generated/graphql';
+import { Comment, Post } from 'src/types/Base';
 
 const RootStyled = styled('div')(({ theme }) => ({
   display: 'flex',

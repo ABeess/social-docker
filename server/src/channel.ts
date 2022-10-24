@@ -14,5 +14,8 @@ export const channel = (server: httpServer) => {
     // Join Room
 
     // End
+    socket.on('stream', (data) => {
+      console.log('stream socket ', data);
+    });
   });
 };

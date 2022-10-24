@@ -2,7 +2,7 @@
 import { verify } from 'jsonwebtoken';
 import { setCookie } from '../utils/cookies';
 import { Arg, Ctx, Mutation, Query, Resolver } from 'type-graphql';
-import { User } from '../entities/index';
+import { User, UserProfile } from '../entities/index';
 import { LoginInput } from '../inputs/LoginInput';
 import { RegisterInput } from '../inputs/RegisterInput';
 import { Conflict, NotfoundError, UnauthorizedError } from '../lib/errorHandle';
@@ -10,7 +10,7 @@ import { UserLogoutResponse, UserResponse } from '../response/UserResponse';
 import { Context, UseJWTPayload } from '../types/index';
 import { generateToken } from '../utils/jwtManger';
 import { generateError } from '../utils/responseError';
-import { redis } from '../utils/redis';
+// import { redis } from '../utils/redis';
 import bycypt from 'bcrypt';
 @Resolver()
 export default class UserResolver {
@@ -36,6 +36,11 @@ export default class UserResolver {
         password: passwordHash,
       });
       await newUser.save();
+
+      const newProfile = UserProfile.create({
+        user: { id: newUser.id },
+      });
+      await newProfile.save();
 
       return {
         code: 201,
@@ -68,11 +73,11 @@ export default class UserResolver {
 
       setCookie({
         res,
-        data: existingUser.id,
+        data: refreshToken,
         name: 'refresh-token',
       });
 
-      await redis.set(`token:${existingUser.id}`, refreshToken, 'EX', 3600 * 24 * 365);
+      // await redis.set(`token:${existingUser.id}`, refreshToken, 'EX', 3600 * 24 * 365);
 
       return {
         code: 200,

@@ -1,4 +1,4 @@
-import { Field, InterfaceType } from 'type-graphql';
+import { Field, InterfaceType, ObjectType } from 'type-graphql';
 @InterfaceType()
 export abstract class BaseResponse {
   @Field(() => Number, { nullable: true })
@@ -21,4 +21,10 @@ export abstract class QueryResponse {
 
   @Field({ nullable: true })
   page?: number;
+}
+
+@ObjectType({ implements: BaseResponse })
+export class MutationResponse implements BaseResponse {
+  code: number;
+  message: string;
 }

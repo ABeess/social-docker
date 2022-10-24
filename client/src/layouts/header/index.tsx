@@ -5,6 +5,7 @@ import Toolbar from '@mui/material/Toolbar';
 import { Stack } from '@mui/system';
 import {
   DarkModeIcon,
+  EmailIcon,
   HomeIcon,
   LightModeIcon,
   OndemandVideoIcon,
@@ -43,8 +44,14 @@ const PROFILE_TABS = [
   },
   {
     value: 'message',
-    icon: <OndemandVideoIcon sx={{ width: 32, height: 32 }} />,
+    icon: <EmailIcon sx={{ width: 32, height: 32 }} />,
     path: PATH_PAGE.message('new'),
+  },
+
+  {
+    value: 'broadcast',
+    icon: <OndemandVideoIcon sx={{ width: 32, height: 32 }} />,
+    path: PATH_PAGE.broadcast,
   },
 ];
 

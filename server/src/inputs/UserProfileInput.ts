@@ -43,3 +43,12 @@ export class UserProfileInput {
   @Field(() => GraphQLJSONObject, { nullable: true })
   user?: User;
 }
+
+@InputType()
+export class UpdateThumbnailInput {
+  @Field()
+  userId: string;
+
+  @Field()
+  url: string;
+}

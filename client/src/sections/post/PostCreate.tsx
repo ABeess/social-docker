@@ -5,6 +5,8 @@ import IconButtonAnimate from 'src/components/animate/IconButtonAnimate';
 import Dialog from 'src/components/Dialog';
 import Iconify from 'src/components/Iconify';
 import MyAvatar from 'src/components/MyAvatar';
+import useRouter from 'src/hooks/useRouter';
+import { PATH_PAGE } from 'src/routes/path';
 import PostCreateForm from './PostCreateForm';
 
 const RootStyled = styled(Card)(({ theme }) => ({
@@ -33,6 +35,14 @@ export interface PostCreateProps {
 }
 
 export default function PostCreate({ open, handleSuccess, handleClose, handleOpen }: PostCreateProps) {
+  const { push } = useRouter();
+
+  const handleCreateLive = () => {
+    const id = Date.now();
+
+    push(PATH_PAGE.createLive + `?entry_point=live&target_id=${id}`);
+  };
+
   return (
     <RootStyled>
       <Stack direction="row" spacing={2}>
@@ -48,6 +58,7 @@ export default function PostCreate({ open, handleSuccess, handleClose, handleOpe
           fullWidth
           size="large"
           startIcon={<LiveIllustrator sx={{ width: 20, mr: 1 }} />}
+          onClick={handleCreateLive}
         >
           Live stream
         </Button>

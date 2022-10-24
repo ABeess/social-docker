@@ -8,6 +8,14 @@ const Router = express.Router();
 Router.use('/', uploadRouter);
 Router.use('/', refreshTokenRouter);
 
+Router.post('/unload', async (_req, res) => {
+  console.log('calll------------------------------------------------------------');
+
+  res.status(200).json({
+    code: 200,
+  });
+});
+
 Router.get('/post', async (_req, res) => {
   // await Conversation.findOne({
   //   where: {

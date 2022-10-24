@@ -70,3 +70,12 @@ export const UPLOAD_AVATAR = gql`
     }
   }
 `;
+
+export const UPDATE_THUMBNAIL = gql`
+  mutation UpdateThumbnail($data: UpdateThumbnailInput!) {
+    updateThumbnail(data: $data) {
+      code
+      message
+    }
+  }
+`;

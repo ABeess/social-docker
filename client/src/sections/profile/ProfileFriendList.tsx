@@ -1,20 +1,11 @@
-import { Box, Card, InputAdornment, Stack, styled, TextField, Typography } from '@mui/material';
-import Grid from '@mui/material/Unstable_Grid2';
-import { useState } from 'react';
-import IconButtonAnimate from 'src/components/animate/IconButtonAnimate';
-import Iconify from 'src/components/Iconify';
-import Image from 'src/components/Image';
-import { GetFriendResponse } from 'src/generated/graphql';
+import { styled } from '@mui/material';
 
 const RootStyled = styled('div')(({ theme }) => ({
   marginTop: theme.spacing(2),
 }));
 
 export const ProfileFriendList = () => {
-  const [friendState] = useState<GetFriendResponse>({});
-
-  const { friends } = friendState;
-
+  console.log('first');
   // const { data } = useGetFriendQuery({
   //   variables: {
   //     userId: query?.id as string,
@@ -34,7 +25,7 @@ export const ProfileFriendList = () => {
 
   return (
     <RootStyled>
-      <Card sx={{ px: 2, py: 4 }}>
+      {/* <Card sx={{ px: 2, py: 4 }}>
         <Stack direction="row" justifyContent="space-between" alignItems="center">
           <Typography variant="h6">Friend</Typography>
           <TextField
@@ -52,7 +43,7 @@ export const ProfileFriendList = () => {
 
         <Box mt={2}>
           <Grid container spacing={2}>
-            {friends?.map((item, index) => (
+            {[...Array(10)].map((item, index) => (
               <Grid key={index} xs={6}>
                 <Card sx={{ p: 2, display: 'flex', alignItems: 'center', gap: 2 }}>
                   <Image src={item?.avatar || ''} sx={{ height: 80, width: 80, borderRadius: 1 }} />
@@ -73,7 +64,7 @@ export const ProfileFriendList = () => {
             ))}
           </Grid>
         </Box>
-      </Card>
+      </Card> */}
     </RootStyled>
   );
 };

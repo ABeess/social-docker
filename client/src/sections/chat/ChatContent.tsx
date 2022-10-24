@@ -1,4 +1,4 @@
-import { styled } from '@mui/material';
+import { Box, styled } from '@mui/material';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
@@ -172,6 +172,9 @@ export default function ChatContent() {
           setValue={setMessage}
           sendSubmit={handleSendMessage}
           loading={sendLoading}
+          // sx={{
+          //   position: 'absolute',
+          // }}
         />
         <ScrollBar
           sx={{
@@ -183,7 +186,7 @@ export default function ChatContent() {
             listChatQuery?.chats.map((item, index) => (
               <ChatItem key={index} data={item} reply={item.sender.id !== user?.id} />
             ))}
-          {/* {!loadingListChat && <Box ref={ref} sx={{ height: '2px' }} />} */}
+          {!loadingListChat && <Box ref={ref} sx={{ height: '2px' }} />}
         </ScrollBar>
       </ContentStyled>
     </RootStyled>

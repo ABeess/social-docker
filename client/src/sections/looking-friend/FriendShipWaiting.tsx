@@ -6,9 +6,9 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 import { flatten } from 'lodash';
 import { getFriendShipWaiting } from 'src/api/friendship.api';
 import FriendSkeleton from 'src/components/skeleton/FriendSkeleton';
-import { User } from 'src/generated/graphql';
 import { useAppDispatch, useAppSelector } from 'src/redux/hooks';
 import { loadDataWaiting } from 'src/redux/slice/friendWaiting.slice';
+import { User } from 'src/types/Base';
 
 export interface AcceptType {
   requester: User;

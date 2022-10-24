@@ -147,3 +147,19 @@ export interface Message extends Model {
   sender: User;
   conversation: Conversation;
 }
+
+export interface Streams extends Model {
+  title: string;
+  description: string;
+  streamKey: string;
+  user: User;
+  clientId: string;
+  live?: boolean;
+  url: string;
+}
+
+export interface StreamsChat extends Model {
+  message: string;
+  user: User;
+  streamId: string;
+}

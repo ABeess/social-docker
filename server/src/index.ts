@@ -16,8 +16,10 @@ import { channel } from './channel';
 import { AppDataSource } from './lib/dataSource';
 import rootRouter from './routes/rootRouter';
 import { Context } from './types';
-import { redis } from './utils/redis';
+// import { redis } from './utils/redis';
 import cookieParser from 'cookie-parser';
+import { nodeMedia } from './nodeMedia';
+import { redis } from './utils/redis';
 
 const main = async (): Promise<void> => {
   // const upload = multer({ storage: multer.diskStorage({}) });
@@ -87,6 +89,8 @@ const main = async (): Promise<void> => {
   await new Promise((resolve) => httpServer.listen(PORT, resolve as () => void));
 
   await AppDataSource.connect();
+
+  nodeMedia.run();
   console.log(`Graphql endpoint on: http://localhost:${PORT}${apolloServer.graphqlPath}`);
 };
 

@@ -8,6 +8,8 @@ import {
   Participant,
   Post,
   PostLike,
+  Streams,
+  StreamsChat,
   User,
   UserProfile,
 } from './Base';
@@ -105,4 +107,23 @@ export interface ConversationResponse extends BaseResponse, Typename {
   conversations: Array<Conversation>;
 }
 
+export interface CreateStreamResponse extends BaseResponse, Typename {
+  data: Streams;
+}
+
+export interface GeStreamResponse extends BaseResponse, Typename {
+  streams: Streams[];
+}
+
+export interface SendStreamChatResponse extends BaseResponse, Typename {
+  chat: StreamsChat;
+}
+
+export interface GetStreamChatResponse extends BaseResponse, Typename {
+  streamChats: StreamsChat[];
+}
+
+export interface GetDetailStreamResponse extends BaseResponse, Typename {
+  stream: Streams;
+}
 export type AddFriendResponse = BaseResponse & Typename;

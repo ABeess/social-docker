@@ -24,6 +24,9 @@ export const PATH_PAGE = {
   lookingFriend: '/looking-friend',
   profile: (id: string) => `/profile/${id}`,
   message: (id: string) => `/message/t/${id}`,
+  broadcast: '/broadcast',
+  liveDetail: (key: string, target_id: string) => `/broadcast/live/${key}?target_id=${target_id}`,
+  createLive: '/live/create',
 };
 
 export const PATH_AUTH = {

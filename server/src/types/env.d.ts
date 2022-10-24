@@ -6,6 +6,7 @@ declare namespace NodeJS {
     DB_USERNAME: string;
     DB_PASSWORD: string;
     DB_NAME: string;
+    REDIS_PASSWORD: string;
     SESSION_SECRET: string;
     ACCESS_TOKEN_SECRET: string;
     REFRESH_TOKEN_SECRET: string;
@@ -17,5 +18,6 @@ declare namespace NodeJS {
     CLOUDINARY_CLOUD_NAME: string;
     CLOUDINARY_API_KEY: string;
     CLOUDINARY_API_SECRET: string;
+    LIVE_URL: string;
   }
 }

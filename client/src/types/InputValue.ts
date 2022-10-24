@@ -88,6 +88,21 @@ export interface CreateConversationInput {
   receiverId: Array<string>;
 }
 
+export interface CreateStreamInput {
+  title: string;
+  description: string;
+  streamKey: string;
+  url: string;
+  user: User;
+  clientId: string;
+}
+
+export interface SendStreamChatInput {
+  message: string;
+  streamId: string;
+  user: User;
+}
+
 // export type AcceptFriendInput = {
 //   id: string;
 //   addressee: User;

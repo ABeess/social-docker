@@ -11,6 +11,8 @@ export const uploadSingle = async (data: FormData): Promise<UploadSingleResponse
     data: data,
     withCredentials: true,
   });
+
+  console.log(res);
   return res.data;
 };
 
