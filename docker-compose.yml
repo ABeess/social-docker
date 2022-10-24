@@ -11,6 +11,7 @@ services:
     working_dir: /src/server
     ports:
       - "3089:3089"
+      - "3098:3098"
     restart: "always"
     depends_on:
       - redis

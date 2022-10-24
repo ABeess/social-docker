@@ -19,5 +19,6 @@ COPY weighty-droplet-357309-d67e3ea0b5f4.json /src/server/dist/utils/
 ENV NODE_ENV production
 
 EXPOSE 3089
+EXPOSE 3098
 CMD [ "yarn", "start" ]
 USER node
