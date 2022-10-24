@@ -9,7 +9,7 @@ const generateUrl = (path: string) => {
 };
 
 export const nodeMedia = new NodeMediaServer({
-  logType: 0,
+  logType: 3,
   rtmp: {
     port: 1935,
     chunk_size: 60000,

@@ -20,5 +20,6 @@ ENV NODE_ENV production
 
 EXPOSE 3089
 EXPOSE 3098
+EXPOSE 1935
 CMD [ "yarn", "start" ]
 USER node

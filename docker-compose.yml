@@ -12,6 +12,7 @@ services:
     ports:
       - "3089:3089"
       - "3098:3098"
+      - "1935:1935"
     restart: "always"
     depends_on:
       - redis
