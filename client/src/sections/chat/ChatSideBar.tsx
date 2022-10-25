@@ -1,3 +1,4 @@
+import AddIcon from '@mui/icons-material/Add';
 import {
   capitalize,
   IconButton,
@@ -11,7 +12,6 @@ import {
 } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { getConversation } from 'src/api/message.api';
-import Iconify from 'src/components/Iconify';
 import MyAvatar from 'src/components/MyAvatar';
 import ScrollBar from 'src/components/ScrollBar';
 import TextMaxLine from 'src/components/TextMaxLine';
@@ -25,7 +25,6 @@ import { fDistanceStrict } from 'src/utils/formatTime';
 import { generateNameChat } from 'src/utils/generateNameChat';
 import ChatAvatarGroup from './ChatAvatarGroup';
 import ChatSearch from './ChatSearch';
-import AddIcon from '@mui/icons-material/Add';
 
 const RootStyled = styled('div')(({ theme }) => ({
   width: NAVBAR.NAV_DESKTOP_WIDTH,
