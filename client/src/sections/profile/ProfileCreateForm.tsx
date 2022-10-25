@@ -147,8 +147,6 @@ export const ProfileCreateForm = () => {
     },
   });
 
-  console.log(isLoading);
-
   // const [updateProfileMutation, { loading }] = useUpdateUserProfileMutation();
   const onSubmit = async (formValue: ProfileValue) => {
     console.log(formValue);

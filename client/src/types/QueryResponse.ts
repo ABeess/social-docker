@@ -15,6 +15,7 @@ import {
   GeStreamResponse,
   GetStreamChatResponse,
   GetDetailStreamResponse,
+  GetUserRecommendResponse,
 } from './Response';
 
 export type Query = {
@@ -35,6 +36,7 @@ export type Query = {
   getLiveStream: GeStreamResponse;
   getStreamChat: GetStreamChatResponse;
   getDetailStream: GetDetailStreamResponse;
+  getUserNotCurrent: GetUserRecommendResponse;
 };
 
 export type AllPostResponse = QueryResponse & {
@@ -62,3 +64,4 @@ export type ConversationQuery = Pick<Query, 'getConversations'>;
 export type GetStreamQuery = Pick<Query, 'getLiveStream'>;
 export type GetStreamChatQuery = Pick<Query, 'getStreamChat'>;
 export type GetDetailStreamQuery = Pick<Query, 'getDetailStream'>;
+export type GetUserRecommendQuery = Pick<Query, 'getUserNotCurrent'>;

@@ -1,21 +1,10 @@
 import { Socket } from 'socket.io';
-import PostChanel from '../entities/PostRoom';
 import UserRoom from '../entities/UserRoom';
 import { redis } from '../utils/redis';
 
 export default class SocketRoom {
   constructor(socket: Socket) {
     console.log('User connect:', socket.id);
-
-    PostChanel.find({}).then((data) => {
-      const channel = data.map((room) => room.chanel);
-      socket.join(channel);
-    });
-
-    UserRoom.find({}).then((data) => {
-      const chanel = data.map((x) => x.room);
-      socket.join(chanel);
-    });
 
     socket.on('disconnect', () => {
       console.log('user disconnect', socket.id);

@@ -33,6 +33,22 @@ export const GET_PROFILE_USER = gql`
   }
 `;
 
+export const GET_USER_RECOMMEND = gql`
+  query GetNotCurrentUser($userId: String!) {
+    getUserNotCurrent(userId: $userId) {
+      code
+      message
+      users {
+        id
+        avatar
+        firstName
+        lastName
+        createdAt
+      }
+    }
+  }
+`;
+
 export const UPDATE_PROFILE = gql`
   mutation UpdateProfile($data: UserProfileInput!) {
     updateProfile(data: $data) {

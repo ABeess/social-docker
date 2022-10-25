@@ -25,6 +25,7 @@ import { fDistanceStrict } from 'src/utils/formatTime';
 import { generateNameChat } from 'src/utils/generateNameChat';
 import ChatAvatarGroup from './ChatAvatarGroup';
 import ChatSearch from './ChatSearch';
+import AddIcon from '@mui/icons-material/Add';
 
 const RootStyled = styled('div')(({ theme }) => ({
   width: NAVBAR.NAV_DESKTOP_WIDTH,
@@ -52,12 +53,16 @@ export default function ChatSideBar() {
     });
   };
 
+  const handleAddNew = () => {
+    push(PATH_PAGE.message('new'));
+  };
+
   return (
     <RootStyled>
       <Stack direction="row" justifyContent="space-between" alignItems="center" px={2} pt={2}>
         <MyAvatar />
-        <IconButton>
-          <Iconify icon="eva:arrow-ios-back-fill" />
+        <IconButton onClick={handleAddNew}>
+          <AddIcon />
         </IconButton>
       </Stack>
 

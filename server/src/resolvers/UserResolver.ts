@@ -1,6 +1,6 @@
 import { isEmpty } from 'lodash';
 import { Arg, Mutation, Query, Resolver } from 'type-graphql';
-import { In, Not } from 'typeorm';
+import { Not } from 'typeorm';
 import Conversation from '../entities/Conversation';
 import Friendship from '../entities/Friendship';
 import User from '../entities/User';
@@ -21,32 +21,9 @@ export default class UserResolver {
   @Query(() => UserNotCurrentResponse)
   async getUserNotCurrent(@Arg('userId') id: string): Promise<UserNotCurrentResponse> {
     try {
-      const friend = await Friendship.find({
-        where: [
-          {
-            addressee: { id },
-            accepted: true,
-          },
-          {
-            requester: { id },
-            accepted: true,
-          },
-        ],
-        relations: {
-          addressee: true,
-          requester: true,
-        },
-      });
-
-      const listId = friend.map((item) => {
-        const addresseeId = item.addressee.id;
-        const requesterId = item.requester.id;
-        return addresseeId === id ? requesterId : addresseeId;
-      });
-
       const users = await User.find({
         where: {
-          id: Not(In([...listId, id])),
+          id: Not(id),
         },
       });
       return {

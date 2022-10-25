@@ -1,7 +1,7 @@
 import { Autocomplete, Avatar, Box, capitalize, Chip, Stack, TextField, Typography } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { SyntheticEvent } from 'react';
-import { getFriends } from 'src/api/friendship.api';
+import { getUserRecommend } from 'src/api/user.api';
 import useRouter from 'src/hooks/useRouter';
 import { useAppDispatch, useAppSelector } from 'src/redux/hooks';
 import { setReceiver } from 'src/redux/slice/receiver.slice';
@@ -13,9 +13,9 @@ export default function ChatNew() {
 
   const dispatch = useAppDispatch();
 
-  const { data: friendQuery, isLoading } = useQuery(
+  const { data: userRecommend, isLoading } = useQuery(
     ['RECEIVER_SELECT', { path: params.to }],
-    () => getFriends(user?.id),
+    () => getUserRecommend(user?.id),
     {
       enabled: params.to === 'new',
     }
@@ -46,7 +46,7 @@ export default function ChatNew() {
             my: 0,
           },
         }}
-        options={friendQuery?.friends || []}
+        options={userRecommend?.users || []}
         onChange={handleSelectAction}
         filterSelectedOptions
         getOptionLabel={(option) => capitalize(`${option?.firstName} ${option?.lastName}`) || ''}

@@ -65,8 +65,6 @@ export default function FriendRequest() {
 
   const handleAccepted = async ({ requester, id }: AcceptType) => {
     try {
-      console.log(requester, id);
-
       await acceptFriend({
         addressee: requester,
         requester: user as User,

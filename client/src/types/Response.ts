@@ -126,4 +126,8 @@ export interface GetStreamChatResponse extends BaseResponse, Typename {
 export interface GetDetailStreamResponse extends BaseResponse, Typename {
   stream: Streams;
 }
+
+export interface GetUserRecommendResponse extends BaseResponse, Typename {
+  users: User[];
+}
 export type AddFriendResponse = BaseResponse & Typename;

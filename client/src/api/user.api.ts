@@ -1,7 +1,13 @@
-import { GET_PROFILE_USER, UPDATE_PROFILE, UPDATE_THUMBNAIL, UPLOAD_AVATAR } from 'src/graphql/userQuery';
+import {
+  GET_PROFILE_USER,
+  GET_USER_RECOMMEND,
+  UPDATE_PROFILE,
+  UPDATE_THUMBNAIL,
+  UPLOAD_AVATAR,
+} from 'src/graphql/userQuery';
 import { ProfileInput } from 'src/types/InputValue';
 import { UpdateProfileMutation, UploadAvatarMutation, UploadThumbnailMutation } from 'src/types/MutationResponse';
-import { ProfileUserQuery } from 'src/types/QueryResponse';
+import { GetUserRecommendQuery, ProfileUserQuery } from 'src/types/QueryResponse';
 import app from 'src/utils/graphqlRequest';
 
 export const getProfile = async (userId: string) => {
@@ -36,4 +42,12 @@ export const updateThumbnail = async (data: IUploadImage) => {
     data,
   });
   return updateThumbnail;
+};
+
+export const getUserRecommend = async (userId: string) => {
+  const { getUserNotCurrent }: GetUserRecommendQuery = await app.request(GET_USER_RECOMMEND, {
+    userId,
+  });
+
+  return getUserNotCurrent;
 };

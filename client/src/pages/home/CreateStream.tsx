@@ -1,6 +1,6 @@
 import { Button, Card, Container, Input, Stack, styled, TextField, Typography } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
-import { useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { createStream } from 'src/api/stream.api';
 import { DoneIcon, VideoCameraBackOutlinedIcon, VideocamRoundedIcon } from 'src/components/icons';
@@ -45,6 +45,11 @@ interface StreamData {
 export default function CreateStream() {
   const { query, push } = useRouter();
   const user = useAppSelector((state) => state.auth.user) as User;
+
+  const [inputValue, setInputValue] = useState({
+    description: '',
+    title: '',
+  });
 
   const [copies, setCopies] = useState<string>('');
 
@@ -95,11 +100,15 @@ export default function CreateStream() {
     },
   });
 
+  const handleOnchange = (e: ChangeEvent<HTMLInputElement>) => {
+    setInputValue((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
   const handleSubmit = () => {
     start &&
       mutate({
-        description: 'description',
-        title: 'title',
+        description: inputValue.description,
+        title: inputValue.title,
         url: streamData?.url as string,
         streamKey: query?.target_id as string,
         clientId: streamData?.id as string,
@@ -112,8 +121,8 @@ export default function CreateStream() {
       <Container maxWidth="md">
         <Stack spacing={2}>
           <Card sx={{ p: 2, display: 'flex', flexDirection: 'column', gap: 2 }}>
-            <TextField label="Title" />
-            <TextField label="Discretion" multiline rows={4} />
+            <TextField name="title" label="Title" onChange={handleOnchange} />
+            <TextField name="description" label="Description" multiline rows={4} onChange={handleOnchange} />
           </Card>
           <Card sx={{ p: 2, pb: 3 }}>
             <Typography variant="subtitle2">Thiết lập phần mềm phát trực tiếp</Typography>

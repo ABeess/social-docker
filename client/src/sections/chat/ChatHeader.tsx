@@ -39,8 +39,6 @@ function AvatarHeader() {
       if (!currentConversation) return;
       const { participants, type, owner } = currentConversation;
 
-      console.log(participants);
-
       const { avatarGroup, name } = generateNameChat({
         type,
         owner,

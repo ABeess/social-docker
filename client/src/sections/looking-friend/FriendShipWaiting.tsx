@@ -47,7 +47,6 @@ export default function FriendShipWaiting() {
       },
     }
   );
-  console.log(friendRequest);
 
   // useEffect(() => {
   //   if (data) {
